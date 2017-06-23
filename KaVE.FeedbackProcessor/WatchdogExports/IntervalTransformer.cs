@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Ionic.Zip;
+using KaVE.Commons.Model;
 using KaVE.Commons.Model.Events;
 using KaVE.Commons.Utils;
 using KaVE.Commons.Utils.Assertion;
@@ -106,8 +107,8 @@ namespace KaVE.FeedbackProcessor.WatchdogExports
                     continue;
                 }
 
-                var version = VersionUtil.Parse(e.KaVEVersion);
-                if (version.KaVEVersionNumber < _firstVersionToInclude)
+                var version = new KaVEVersion(e.KaVEVersion);
+                if (version.ReleaseNumber < _firstVersionToInclude)
                 {
                     continue;
                 }
