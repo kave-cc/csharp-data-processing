@@ -32,8 +32,8 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
             Assert.AreEqual(DateTime.MinValue, sut.DayLast);
             Assert.AreEqual(0, sut.NumDays);
             Assert.AreEqual(0, sut.NumMonth);
-            Assert.AreEqual(0, sut.NumEvents);
-            Assert.AreEqual(new Dictionary<Type, int>(), sut.NumEventsDetails);
+            Assert.AreEqual(0, sut.NumEventsTotal);
+            Assert.AreEqual(new Dictionary<Type, int>(), sut.NumEventsDetailed);
             Assert.AreEqual(Educations.Unknown, sut.Education);
             Assert.AreEqual(Positions.Unknown, sut.Position);
             Assert.AreEqual(0, sut.NumCodeCompletion);
@@ -54,11 +54,7 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
                 DayLast = now,
                 NumDays = 1,
                 NumMonth = 2,
-                NumEvents = 3,
-                NumEventsDetails =
-                {
-                    {typeof(int), 1}
-                },
+                NumEventsDetailed = {{typeof(int), 3}},
                 Education = Educations.Bachelor,
                 Position = Positions.Student,
                 NumCodeCompletion = 4,
@@ -69,13 +65,47 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
             Assert.AreEqual(now, sut.DayLast);
             Assert.AreEqual(1, sut.NumDays);
             Assert.AreEqual(2, sut.NumMonth);
-            Assert.AreEqual(3, sut.NumEvents);
-            Assert.AreEqual(new Dictionary<Type, int> {{typeof(int), 1}}, sut.NumEventsDetails);
+            Assert.AreEqual(new Dictionary<Type, int> {{typeof(int), 3}}, sut.NumEventsDetailed);
             Assert.AreEqual(Educations.Bachelor, sut.Education);
             Assert.AreEqual(Positions.Student, sut.Position);
             Assert.AreEqual(4, sut.NumCodeCompletion);
             Assert.AreEqual(5, sut.NumTestRuns);
             Assert.AreEqual(TimeSpan.FromSeconds(3), sut.ActiveTime);
+        }
+
+        [Test]
+        public void NumEventsTotal_0()
+        {
+            var sut = new InteractionStatistics();
+            Assert.AreEqual(0, sut.NumEventsTotal);
+        }
+
+        [Test]
+        public void NumEventsTotal_1()
+        {
+            var sut = new InteractionStatistics
+            {
+                NumEventsDetailed =
+                {
+                    {typeof(int), 1}
+                }
+            };
+            Assert.AreEqual(1, sut.NumEventsTotal);
+        }
+
+        [Test]
+        public void NumEventsTotal_3()
+        {
+            var sut = new InteractionStatistics
+            {
+                NumEventsDetailed =
+                {
+                    {typeof(int), 1},
+                    {typeof(double), 2},
+                    {typeof(float), 3}
+                }
+            };
+            Assert.AreEqual(6, sut.NumEventsTotal);
         }
 
         [Test]
@@ -97,10 +127,9 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
                 DayLast = now,
                 NumDays = 1,
                 NumMonth = 2,
-                NumEvents = 3,
-                NumEventsDetails =
+                NumEventsDetailed =
                 {
-                    {typeof(int), 1}
+                    {typeof(int), 3}
                 },
                 Education = Educations.Bachelor,
                 Position = Positions.Student,
@@ -114,10 +143,9 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
                 DayLast = now,
                 NumDays = 1,
                 NumMonth = 2,
-                NumEvents = 3,
-                NumEventsDetails =
+                NumEventsDetailed =
                 {
-                    {typeof(int), 1}
+                    {typeof(int), 3}
                 },
                 Education = Educations.Bachelor,
                 Position = Positions.Student,
@@ -180,24 +208,12 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
         }
 
         [Test]
-        public void Different_NumEvents()
-        {
-            var a = new InteractionStatistics();
-            var b = new InteractionStatistics
-            {
-                NumEvents = 3
-            };
-            Assert.AreNotEqual(a, b);
-            Assert.AreNotEqual(a.GetHashCode(), b.GetHashCode());
-        }
-
-        [Test]
         public void Different_NumEventsDetails()
         {
             var a = new InteractionStatistics();
             var b = new InteractionStatistics
             {
-                NumEventsDetails =
+                NumEventsDetailed =
                 {
                     {typeof(int), 1}
                 }

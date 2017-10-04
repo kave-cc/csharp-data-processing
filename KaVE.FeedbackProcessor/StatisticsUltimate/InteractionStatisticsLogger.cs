@@ -56,7 +56,7 @@ namespace KaVE.FeedbackProcessor.StatisticsUltimate
                         stats.DayLast,
                         stats.NumDays,
                         stats.NumMonth,
-                        stats.NumEvents,
+                        stats.NumEventsTotal,
                         stats.Education,
                         stats.Position,
                         stats.NumCodeCompletion,

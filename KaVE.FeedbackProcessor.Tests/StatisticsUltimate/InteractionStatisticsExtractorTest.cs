@@ -50,7 +50,7 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
                 EventAt(1234, 8, 9)
             };
             var actual = _sut.CreateStatistics(es);
-            Assert.AreEqual(4, actual.NumEvents);
+            Assert.AreEqual(4, actual.NumEventsTotal);
             Assert.AreEqual(3, actual.NumDays);
             Assert.AreEqual(2, actual.NumMonth);
             Assert.AreEqual(GetTime(1234, 5, 6).Date, actual.DayFirst);
@@ -68,7 +68,7 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
                 EventAt(1234, 5, 6)
             };
             var actual = _sut.CreateStatistics(es);
-            Assert.AreEqual(4, actual.NumEvents);
+            Assert.AreEqual(4, actual.NumEventsTotal);
             Assert.AreEqual(3, actual.NumDays);
             Assert.AreEqual(2, actual.NumMonth);
             Assert.AreEqual(GetTime(1234, 5, 6).Date, actual.DayFirst);
@@ -86,7 +86,7 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
                 {
                     e
                 });
-            Assert.AreEqual(1, actual.NumEvents);
+            Assert.AreEqual(1, actual.NumEventsTotal);
             Assert.AreEqual(1, actual.NumDays);
             Assert.AreEqual(1, actual.NumMonth);
             Assert.AreEqual(DateTime.MinValue.Date, actual.DayFirst);
