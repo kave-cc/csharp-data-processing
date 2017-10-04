@@ -15,6 +15,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using KaVE.Commons.Model.Events.UserProfiles;
 using KaVE.FeedbackProcessor.StatisticsUltimate;
 using NUnit.Framework;
@@ -32,6 +33,7 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
             Assert.AreEqual(0, sut.NumDays);
             Assert.AreEqual(0, sut.NumMonth);
             Assert.AreEqual(0, sut.NumEvents);
+            Assert.AreEqual(new Dictionary<Type, int>(), sut.NumEventsDetails);
             Assert.AreEqual(Educations.Unknown, sut.Education);
             Assert.AreEqual(Positions.Unknown, sut.Position);
             Assert.AreEqual(0, sut.NumCodeCompletion);
@@ -53,6 +55,10 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
                 NumDays = 1,
                 NumMonth = 2,
                 NumEvents = 3,
+                NumEventsDetails =
+                {
+                    {typeof(int), 1}
+                },
                 Education = Educations.Bachelor,
                 Position = Positions.Student,
                 NumCodeCompletion = 4,
@@ -64,6 +70,7 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
             Assert.AreEqual(1, sut.NumDays);
             Assert.AreEqual(2, sut.NumMonth);
             Assert.AreEqual(3, sut.NumEvents);
+            Assert.AreEqual(new Dictionary<Type, int> {{typeof(int), 1}}, sut.NumEventsDetails);
             Assert.AreEqual(Educations.Bachelor, sut.Education);
             Assert.AreEqual(Positions.Student, sut.Position);
             Assert.AreEqual(4, sut.NumCodeCompletion);
@@ -91,6 +98,10 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
                 NumDays = 1,
                 NumMonth = 2,
                 NumEvents = 3,
+                NumEventsDetails =
+                {
+                    {typeof(int), 1}
+                },
                 Education = Educations.Bachelor,
                 Position = Positions.Student,
                 NumCodeCompletion = 4,
@@ -104,6 +115,10 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
                 NumDays = 1,
                 NumMonth = 2,
                 NumEvents = 3,
+                NumEventsDetails =
+                {
+                    {typeof(int), 1}
+                },
                 Education = Educations.Bachelor,
                 Position = Positions.Student,
                 NumCodeCompletion = 4,
@@ -171,6 +186,21 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
             var b = new InteractionStatistics
             {
                 NumEvents = 3
+            };
+            Assert.AreNotEqual(a, b);
+            Assert.AreNotEqual(a.GetHashCode(), b.GetHashCode());
+        }
+
+        [Test]
+        public void Different_NumEventsDetails()
+        {
+            var a = new InteractionStatistics();
+            var b = new InteractionStatistics
+            {
+                NumEventsDetails =
+                {
+                    {typeof(int), 1}
+                }
             };
             Assert.AreNotEqual(a, b);
             Assert.AreNotEqual(a.GetHashCode(), b.GetHashCode());

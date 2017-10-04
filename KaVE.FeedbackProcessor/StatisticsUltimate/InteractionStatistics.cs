@@ -15,6 +15,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using KaVE.Commons.Model.Events.UserProfiles;
 using KaVE.Commons.Utils;
 
@@ -27,6 +28,7 @@ namespace KaVE.FeedbackProcessor.StatisticsUltimate
         int NumDays { get; }
         int NumMonth { get; }
         int NumEvents { get; }
+        IDictionary<Type, int> NumEventsDetails { get; }
         Educations Education { get; }
         Positions Position { get; }
         int NumCodeCompletion { get; }
@@ -42,6 +44,7 @@ namespace KaVE.FeedbackProcessor.StatisticsUltimate
         public int NumDays { get; set; }
         public int NumMonth { get; set; }
         public int NumEvents { get; set; }
+        public IDictionary<Type, int> NumEventsDetails { get; private set; }
 
         public Educations Education { get; set; }
         public Positions Position { get; set; }
@@ -54,6 +57,7 @@ namespace KaVE.FeedbackProcessor.StatisticsUltimate
         public InteractionStatistics()
         {
             ActiveTime = TimeSpan.Zero;
+            NumEventsDetails = new Dictionary<Type, int>();
         }
 
         public override bool Equals(object obj)
@@ -64,7 +68,8 @@ namespace KaVE.FeedbackProcessor.StatisticsUltimate
         protected bool Equals(InteractionStatistics other)
         {
             return DayFirst.Equals(other.DayFirst) && DayLast.Equals(other.DayLast) && NumDays == other.NumDays &&
-                   NumMonth == other.NumMonth && NumEvents == other.NumEvents && Education == other.Education &&
+                   NumMonth == other.NumMonth && NumEvents == other.NumEvents &&
+                   EqualityUtils.Equals(NumEventsDetails, other.NumEventsDetails) && Education == other.Education &&
                    Position == other.Position && NumCodeCompletion == other.NumCodeCompletion &&
                    NumTestRuns == other.NumTestRuns && ActiveTime.Equals(other.ActiveTime);
         }
@@ -79,6 +84,7 @@ namespace KaVE.FeedbackProcessor.StatisticsUltimate
                 hashCode = (hashCode * 397) ^ NumDays;
                 hashCode = (hashCode * 397) ^ NumMonth;
                 hashCode = (hashCode * 397) ^ NumEvents;
+                hashCode = (hashCode * 397) ^ HashCodeUtils.For(397, NumEventsDetails);
                 hashCode = (hashCode * 397) ^ (int) Education;
                 hashCode = (hashCode * 397) ^ (int) Position;
                 hashCode = (hashCode * 397) ^ NumCodeCompletion;
