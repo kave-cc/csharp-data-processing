@@ -35,6 +35,9 @@ namespace KaVE.FeedbackProcessor.StatisticsUltimate
         [SuppressMessage("ReSharper", "LocalizableElement")]
         public void Result(IDictionary<string, InteractionStatistics> results)
         {
+            var eventCounts = new Dictionary<Type, int>();
+            var numEventsTotal = 0;
+
             lock (Lock)
             {
                 Log("done!");
@@ -63,6 +66,31 @@ namespace KaVE.FeedbackProcessor.StatisticsUltimate
                         stats.NumTestRuns,
                         stats.ActiveTime.TotalHours,
                         stats.ActiveTime);
+
+                    numEventsTotal += stats.NumEventsTotal;
+
+                    foreach (var t in stats.NumEventsDetailed)
+                    {
+                        if (eventCounts.ContainsKey(t.Key))
+                        {
+                            eventCounts[t.Key] += t.Value;
+                        }
+                        else
+                        {
+                            eventCounts[t.Key] = t.Value;
+                        }
+                    }
+                }
+
+                Console.WriteLine(
+                    "\n\nDetailed event counts over all {0} participants ({1} events):",
+                    results.Keys.Count,
+                    numEventsTotal);
+                foreach (var t in eventCounts.Keys)
+                {
+                    var count = eventCounts[t];
+                    var perc = count / (double) numEventsTotal;
+                    Console.WriteLine("{0}\t{1}\t{2:0.0}", t.Name, count, perc * 100);
                 }
             }
         }

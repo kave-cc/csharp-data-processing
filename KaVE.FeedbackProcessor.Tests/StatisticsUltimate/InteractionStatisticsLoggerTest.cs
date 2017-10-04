@@ -74,7 +74,7 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
                 DayLast = DateTime.Now.AddDays(-3),
                 NumDays = 6,
                 NumMonth = 7,
-                NumEventsDetailed = {{typeof(int), 3}, {typeof(float), 6}},
+                NumEventsDetailed = {{typeof(int), 5}, {typeof(float), 6}},
                 Education = Educations.Master,
                 Position = Positions.SoftwareEngineer,
                 NumCodeCompletion = 9,
