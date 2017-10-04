@@ -20,12 +20,40 @@ using KaVE.Commons.Model.Events;
 using KaVE.Commons.Model.Events.CompletionEvents;
 using KaVE.Commons.Model.Events.TestRunEvents;
 using KaVE.Commons.Model.Events.UserProfiles;
+using KaVE.Commons.Model.Events.VersionControlEvents;
+using KaVE.Commons.Model.Events.VisualStudio;
 using KaVE.Commons.Utils.Assertion;
 
 namespace KaVE.FeedbackProcessor.StatisticsUltimate
 {
     public class InteractionStatisticsExtractor
     {
+        public readonly List<Type> AllEventTypes = new List<Type>
+        {
+            typeof(CompletionEvent),
+            typeof(TestRunEvent),
+            typeof(UserProfileEvent),
+            typeof(VersionControlEvent),
+
+            typeof(BuildEvent),
+            typeof(DebuggerEvent),
+            typeof(DocumentEvent),
+            typeof(EditEvent),
+            typeof(FindEvent),
+            typeof(IDEStateEvent),
+            typeof(InstallEvent),
+            typeof(SolutionEvent),
+            typeof(UpdateEvent),
+            typeof(WindowEvent),
+
+            typeof(ActivityEvent),
+            typeof(CommandEvent),
+            typeof(ErrorEvent),
+            typeof(InfoEvent),
+            typeof(NavigationEvent),
+            typeof(SystemEvent)
+        };
+
         public const int TimeOutInS = 16;
 
         public InteractionStatistics CreateStatistics(IEnumerable<IIDEEvent> events)
@@ -38,6 +66,11 @@ namespace KaVE.FeedbackProcessor.StatisticsUltimate
 
             DateTime? curStart = null;
             DateTime? curEnd = null;
+
+            foreach (var t in AllEventTypes)
+            {
+                stats.NumEventsDetailed[t] = 0;
+            }
 
             foreach (var e in events)
             {
@@ -67,7 +100,14 @@ namespace KaVE.FeedbackProcessor.StatisticsUltimate
                     }
                 }
 
-                stats.NumEvents++;
+                if (stats.NumEventsDetailed.ContainsKey(e.GetType()))
+                {
+                    stats.NumEventsDetailed[e.GetType()]++;
+                }
+                else
+                {
+                    stats.NumEventsDetailed[e.GetType()] = 1;
+                }
 
                 if (!e.TriggeredAt.HasValue)
                 {

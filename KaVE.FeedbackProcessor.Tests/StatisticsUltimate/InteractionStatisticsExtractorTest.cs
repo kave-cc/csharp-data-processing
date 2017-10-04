@@ -16,10 +16,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using KaVE.Commons.Model.Events;
 using KaVE.Commons.Model.Events.CompletionEvents;
 using KaVE.Commons.Model.Events.TestRunEvents;
 using KaVE.Commons.Model.Events.UserProfiles;
+using KaVE.Commons.Model.Events.VersionControlEvents;
 using KaVE.Commons.Model.Events.VisualStudio;
 using KaVE.FeedbackProcessor.StatisticsUltimate;
 using NUnit.Framework;
@@ -199,6 +201,89 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
             // test is flaky without this implicit rounding
             var diff = Math.Round((actual.ActiveTime - TimeSpan.FromSeconds(21)).TotalSeconds);
             Assert.AreEqual(0, diff);
+        }
+
+        [Test]
+        public void NumberOfEvents_AllAreAlwaysRegistered()
+        {
+            var actual = Analyze().NumEventsDetailed;
+
+            var expected = new Dictionary<Type, int>
+            {
+                {typeof(CompletionEvent), 0},
+                {typeof(TestRunEvent), 0},
+                {typeof(UserProfileEvent), 0},
+                {typeof(VersionControlEvent), 0},
+
+                {typeof(BuildEvent), 0},
+                {typeof(DebuggerEvent), 0},
+                {typeof(DocumentEvent), 0},
+                {typeof(EditEvent), 0},
+                {typeof(FindEvent), 0},
+                {typeof(IDEStateEvent), 0},
+                {typeof(InstallEvent), 0},
+                {typeof(SolutionEvent), 0},
+                {typeof(UpdateEvent), 0},
+                {typeof(WindowEvent), 0},
+
+                {typeof(ActivityEvent), 0},
+                {typeof(CommandEvent), 0},
+                {typeof(ErrorEvent), 0},
+                {typeof(InfoEvent), 0},
+                {typeof(NavigationEvent), 0},
+                {typeof(SystemEvent), 0}
+            };
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void NumberOfEvents_AllAreCounted()
+        {
+            var eventTypes = new List<IDEEvent>
+            {
+                new CompletionEvent(),
+                new TestRunEvent(),
+                new UserProfileEvent(),
+                new VersionControlEvent(),
+
+                new BuildEvent(),
+                new DebuggerEvent(),
+                new DocumentEvent(),
+                new EditEvent(),
+                new FindEvent(),
+                new IDEStateEvent(),
+                new InstallEvent(),
+                new SolutionEvent(),
+                new UpdateEvent(),
+                new WindowEvent(),
+
+                new ActivityEvent(),
+                new CommandEvent(),
+                new ErrorEvent(),
+                new InfoEvent(),
+                new NavigationEvent(),
+                new SystemEvent()
+            };
+
+            var count = 1;
+            var events = new List<IIDEEvent>();
+            foreach (var t in eventTypes)
+            {
+                for (var i = 0; i < count; i++)
+                {
+                    events.Add(t);
+                }
+                count++;
+            }
+            var actual = Analyze(events.ToArray()).NumEventsDetailed;
+
+            Assert.AreEqual(eventTypes.Count, actual.Keys.Count);
+            count = 1;
+            foreach (var t in eventTypes.Select(t => t.GetType()))
+            {
+                Assert.AreEqual(count, actual[t]);
+                count++;
+            }
         }
 
         private static IIDEEvent E(int startTimeInS, int duration)
