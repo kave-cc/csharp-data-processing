@@ -20,6 +20,7 @@ using System.Linq;
 using KaVE.Commons.Model.Events;
 using KaVE.Commons.Utils.IO.Archives;
 using KaVE.FeedbackProcessor.Preprocessing.Filters;
+using KaVE.FeedbackProcessor.Preprocessing.Fixers;
 using KaVE.FeedbackProcessor.Preprocessing.Logging;
 using KaVE.FeedbackProcessor.Preprocessing.Model;
 
@@ -37,6 +38,8 @@ namespace KaVE.FeedbackProcessor.Preprocessing
         private Dictionary<string, int> _counts;
 
         public ISet<IFilter> Filters { get; private set; }
+        public ISet<IFixer> Fixers { get; private set; }
+
         private bool _hasReportedFilters;
 
         public Cleaner(IPreprocessingIo io, ICleanerLogger log)
@@ -47,6 +50,7 @@ namespace KaVE.FeedbackProcessor.Preprocessing
             _log.WorkingIn(io.GetFullPath_Merged(""), io.GetFullPath_Out(""));
 
             Filters = new HashSet<IFilter>();
+            Fixers = new HashSet<IFixer>();
         }
 
         public void Clean(string relZip)
@@ -58,6 +62,7 @@ namespace KaVE.FeedbackProcessor.Preprocessing
             var events = ReadEvents(relZip);
 
             events = ApplyFilters(events);
+            events = ApplyFixers(events);
             events = RemoveDuplicates(events);
             events = OrderEvents(events);
 
@@ -96,6 +101,16 @@ namespace KaVE.FeedbackProcessor.Preprocessing
             {
                 events = events.Where(filter.Func2);
                 events = AddCounter(events, string.Format("after applying '{0}'", filter.Name));
+            }
+            return events;
+        }
+
+        private IEnumerable<IDEEvent> ApplyFixers(IEnumerable<IDEEvent> events)
+        {
+            foreach (var f in Fixers)
+            {
+                events = f.Process(events);
+                events = AddCounter(events, string.Format("after applying '{0}'", f.Name));
             }
             return events;
         }

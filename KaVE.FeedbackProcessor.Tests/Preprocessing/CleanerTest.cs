@@ -22,6 +22,7 @@ using KaVE.Commons.Utils.Assertion;
 using KaVE.Commons.Utils.Collections;
 using KaVE.FeedbackProcessor.Preprocessing;
 using KaVE.FeedbackProcessor.Preprocessing.Filters;
+using KaVE.FeedbackProcessor.Preprocessing.Fixers;
 using KaVE.FeedbackProcessor.Preprocessing.Logging;
 using Moq;
 using NUnit.Framework;
@@ -36,12 +37,14 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing
         private ICleanerLogger _log;
         private IList<IDictionary<string, int>> _reportedCounts;
         private IKaVEList<string> _registeredFilters;
+        private IKaVEList<string> _registeredFixers;
 
         [SetUp]
         public void Setup()
         {
             _reportedCounts = new List<IDictionary<string, int>>();
             _registeredFilters = Lists.NewList<string>();
+            _registeredFixers = Lists.NewList<string>();
 
             _log = Mock.Of<ICleanerLogger>();
             Mock.Get(_log)
@@ -49,6 +52,9 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing
                 .Callback<IDictionary<string, int>>(d => _reportedCounts.Add(d));
             Mock.Get(_log)
                 .Setup(l => l.RegisteredFilters(It.IsAny<IEnumerable<string>>()))
+                .Callback<IEnumerable<string>>(fs => _registeredFilters.AddAll(fs));
+            Mock.Get(_log)
+                .Setup(l => l.RegisteredFixers(It.IsAny<IEnumerable<string>>()))
                 .Callback<IEnumerable<string>>(fs => _registeredFilters.AddAll(fs));
 
             _sut = new Cleaner(Io, _log);
@@ -84,10 +90,12 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing
         #endregion
 
         [Test]
-        public void NoFiltersByDefault()
+        public void NoFiltersAndFixersByDefault()
         {
             Assert.NotNull(_sut.Filters);
-            CollectionAssert.AreEqual(new IFilter[] {}, _sut.Filters);
+            Assert.NotNull(_sut.Fixers);
+            CollectionAssert.AreEqual(new IFilter[] { }, _sut.Filters);
+            CollectionAssert.AreEqual(new IFixer[] { }, _sut.Fixers);
         }
 
         [Test]
@@ -121,7 +129,7 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing
         }
 
         [Test]
-        public void SufoldersWork()
+        public void SubfoldersWork()
         {
             Add(@"sub\a", E("a", 2), E("b", 1));
 
@@ -142,6 +150,18 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing
             AssertEvents("a", E("a", 1), E("c", 3));
         }
 
+        [Test]
+        public void FixersCanBeAddedAndTheyAreExecuted()
+        {
+            _sut.Fixers.Add(new TestFixer("b"));
+
+            Add("a", E("a", 10), E("b", 20), E("c", 30));
+
+            Clean("a");
+
+            AssertEvents("a", E("a", 10), E("b", 20), E("b", 21), E("c", 30));
+        }
+
         [Test, ExpectedException(typeof(AssertException))]
         public void ZipMustExist()
         {
@@ -152,6 +172,7 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing
         public void IntegrationExample()
         {
             _sut.Filters.Add(new TestFilter("b"));
+            _sut.Fixers.Add(new TestFixer("a"));
 
             Add("a", E("a", 3), E("b", 2), E("c", 1), E("a", 3));
             Add("b", E("d", 1));
@@ -159,7 +180,7 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing
             Clean("a");
             Clean("b");
 
-            AssertEvents("a", E("c", 1), E("a", 3));
+            AssertEvents("a", E("c", 1), E("a", 3), E("a", 4));
             AssertEvents("b", E("d", 1));
 
             _sut.Dispose();
@@ -172,12 +193,13 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing
             Mock.Get(_log).Verify(l => l.FinishedWriting(It.IsAny<IDictionary<string, int>>()), Times.Exactly(2));
 
             CollectionAssert.AreEquivalent(new[] {"command filter: b"}, _registeredFilters);
-            CollectionAssert.Contains(_reportedCounts, Res(4, 3, 2, 2));
-            CollectionAssert.Contains(_reportedCounts, Res(1, 1, 1, 1));
+            CollectionAssert.Contains(_reportedCounts, Res(4, 3, 5, 3, 3));
+            CollectionAssert.Contains(_reportedCounts, Res(1, 1, 1, 1, 1));
         }
 
         private static IDictionary<string, int> Res(int numBefore,
             int numAfterFilter,
+            int numAfterFixer,
             int numAfterDuplicate,
             int numAfterOrdering)
         {
@@ -185,6 +207,7 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing
             {
                 {"before applying any filter", numBefore},
                 {"after applying 'command filter: b'", numAfterFilter},
+                {"after applying 'duplicator: a'", numAfterFixer},
                 {"after removing duplicates", numAfterDuplicate},
                 {"after ordering", numAfterOrdering}
             };
@@ -216,6 +239,36 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing
                             return !ce.CommandId.Equals(_filterId);
                         }
                         return true;
+                    };
+                }
+            }
+        }
+
+        private class TestFixer : BaseFixer
+        {
+            private readonly string _id;
+
+            public TestFixer(string id)
+            {
+                _id = id;
+            }
+
+            public override string Name
+            {
+                get { return "duplicator: " + _id; }
+            }
+
+            public override IEnumerable<IDEEvent> Process(IDEEvent e)
+            {
+                yield return e;
+
+                var ce = e as CommandEvent;
+                if (ce != null && ce.TriggeredAt.HasValue && ce.CommandId.Equals(_id))
+                {
+                    yield return new CommandEvent
+                    {
+                        TriggeredAt = ce.TriggeredAt.Value.AddSeconds(1),
+                        CommandId = ce.CommandId
                     };
                 }
             }

@@ -61,11 +61,11 @@ namespace KaVE.FeedbackProcessor
             //new TimeBudgetEvaluationApp(Logger).Run();
             //new SSTSequenceExtractor(Logger).Run();
             //RunExhaustiveNamesFixTests();
-            //RunPreprocessing();
+            RunPreprocessing();
             //RunWatchdogExport();
             //RunInteractionStatistics();
             //RunContextStatistics();
-            RunEditLocationAnalysis();
+            //RunEditLocationAnalysis();
             //RunSSTTransformationComparison(Root + @"Contexts-161031", Root + @"Contexts-170428");
             //RunEmDebug();
 

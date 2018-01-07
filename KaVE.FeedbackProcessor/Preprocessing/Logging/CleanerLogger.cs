@@ -23,6 +23,7 @@ namespace KaVE.FeedbackProcessor.Preprocessing.Logging
     {
         void WorkingIn(string dirIn, string dirOut);
         void RegisteredFilters(IEnumerable<string> filters);
+        void RegisteredFixers(IEnumerable<string> fixers);
         void ReadingZip(string zip);
         void WritingEvents();
         void FinishedWriting(IDictionary<string, int> counts);
@@ -58,6 +59,16 @@ namespace KaVE.FeedbackProcessor.Preprocessing.Logging
             foreach (var filter in filters)
             {
                 _log.Log("- {0}", filter);
+            }
+        }
+
+        public void RegisteredFixers(IEnumerable<string> fixers)
+        {
+            _log.Log();
+            _log.Log("registered fixers:");
+            foreach (var fixer in fixers)
+            {
+                _log.Log("- {0}", fixer);
             }
         }
 

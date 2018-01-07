@@ -19,6 +19,7 @@ using System.IO;
 using KaVE.Commons.Utils;
 using KaVE.Commons.Utils.Assertion;
 using KaVE.FeedbackProcessor.Preprocessing.Filters;
+using KaVE.FeedbackProcessor.Preprocessing.Fixers;
 using KaVE.FeedbackProcessor.Preprocessing.Logging;
 using KaVE.FeedbackProcessor.Preprocessing.Model;
 
@@ -93,6 +94,10 @@ namespace KaVE.FeedbackProcessor.Preprocessing
                     new NoSessionIdFilter(),
                     new NoTimeFilter(),
                     new InvalidCompletionEventFilter()
+                },
+                Fixers =
+                {
+                    new VersionControlEventSplitter()
                 }
             };
         }
