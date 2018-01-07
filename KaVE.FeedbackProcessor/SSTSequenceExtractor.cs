@@ -65,7 +65,7 @@ namespace KaVE.FeedbackProcessor
                     _logger.Info("Processing WorkPeriod {0}...", workPeriod);
                     foreach (
                         var completionEvent in
-                            eventsCollection.GetEventStream(developer).OfType<CompletionEvent>())
+                        eventsCollection.GetEventStream(developer).OfType<CompletionEvent>())
                     {
                         var timestamp = completionEvent.TriggeredAt.GetValueOrDefault();
                         var ctx = completionEvent.Context2;
@@ -84,7 +84,7 @@ namespace KaVE.FeedbackProcessor
             }
         }
 
-        private void Insert(DevelopmentHistoryDatabase db, string workPeriod, DateTime timestamp, Context ctx)
+        private void Insert(DevelopmentHistoryDatabase db, string workPeriod, DateTimeOffset timestamp, Context ctx)
         {
             var query = GetQuery(ctx);
             var usages = GetObjectUsages(ctx);

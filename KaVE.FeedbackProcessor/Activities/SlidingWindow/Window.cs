@@ -31,15 +31,15 @@ namespace KaVE.FeedbackProcessor.Activities.SlidingWindow
         public readonly TimeSpan Span;
         public readonly IList<ActivityEvent> Events = new KaVEList<ActivityEvent>();
 
-        public Window(DateTime start, TimeSpan span)
+        public Window(DateTimeOffset start, TimeSpan span)
         {
             Span = span;
             Start = start;
         }
 
-        public DateTime Start { get; set; }
+        public DateTimeOffset Start { get; set; }
 
-        public DateTime End
+        public DateTimeOffset End
         {
             get { return Start + Span; }
         }
@@ -89,8 +89,8 @@ namespace KaVE.FeedbackProcessor.Activities.SlidingWindow
             unchecked
             {
                 var hashCode = Span.GetHashCode();
-                hashCode = (hashCode*397) ^ (Events != null ? Events.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ Start.GetHashCode();
+                hashCode = (hashCode * 397) ^ (Events != null ? Events.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ Start.GetHashCode();
                 return hashCode;
             }
         }

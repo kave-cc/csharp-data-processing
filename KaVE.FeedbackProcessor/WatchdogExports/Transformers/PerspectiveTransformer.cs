@@ -26,14 +26,14 @@ namespace KaVE.FeedbackProcessor.WatchdogExports.Transformers
     {
         private readonly IList<PerspectiveInterval> _intervals;
         private PerspectiveInterval _currentInterval;
-        private DateTime _referenceTime;
+        private DateTimeOffset _referenceTime;
         private readonly TransformerContext _context;
 
         public PerspectiveTransformer(TransformerContext context)
         {
             _intervals = new List<PerspectiveInterval>();
             _context = context;
-            _referenceTime = DateTime.MinValue;
+            _referenceTime = DateTimeOffset.MinValue;
         }
 
         public void ProcessEvent(IDEEvent @event)

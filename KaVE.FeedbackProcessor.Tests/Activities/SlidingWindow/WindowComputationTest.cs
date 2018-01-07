@@ -34,7 +34,7 @@ namespace KaVE.FeedbackProcessor.Tests.Activities.SlidingWindow
         private ActivityWindowProcessor _uut;
         private TestMergeStrategy _testMergeStrategy;
         private Developer _someDeveloper;
-        private DateTime _someDateTime;
+        private DateTimeOffset _someDateTime;
 
         [SetUp]
         public void SetUp()
@@ -274,17 +274,17 @@ namespace KaVE.FeedbackProcessor.Tests.Activities.SlidingWindow
             Assert.AreEqual(event2.Duration, WindowSpan);
         }
 
-        private static ActivityEvent SomeEvent(DateTime triggeredAt)
+        private static ActivityEvent SomeEvent(DateTimeOffset triggeredAt)
         {
             return new ActivityEvent {TriggeredAt = triggeredAt};
         }
 
-        private static ActivityEvent SomeEvent(DateTime triggeredAt, TimeSpan duration)
+        private static ActivityEvent SomeEvent(DateTimeOffset triggeredAt, TimeSpan duration)
         {
             return new ActivityEvent {TriggeredAt = triggeredAt, Duration = duration};
         }
 
-        private static Window EmptyWindow(DateTime windowStart)
+        private static Window EmptyWindow(DateTimeOffset windowStart)
         {
             return new Window(windowStart, WindowSpan);
         }

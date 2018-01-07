@@ -32,7 +32,7 @@ namespace KaVE.FeedbackProcessor.Tests.Activities.SlidingWindow
         private ActivityWindowProcessor _uut;
         private TestMergeStrategy _testMergeStrategy;
         private Developer _someDeveloper;
-        private DateTime _someDateTime;
+        private DateTimeOffset _someDateTime;
 
         [SetUp]
         public void SetUp()

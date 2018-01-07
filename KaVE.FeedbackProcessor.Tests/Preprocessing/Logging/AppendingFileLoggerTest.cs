@@ -28,7 +28,7 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing.Logging
     {
         #region setup and helpers
 
-        private DateTime _now;
+        private DateTimeOffset _now;
         private IDateUtils _dateUtils;
 
         private string _dirTmp;
@@ -39,7 +39,7 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing.Logging
         {
             CultureUtils.SetDefaultCultureForThisThread();
 
-            _now = DateTime.MinValue;
+            _now = DateTimeOffset.MinValue;
             _dateUtils = Mock.Of<IDateUtils>();
             Mock.Get(_dateUtils).Setup(u => u.Now).Returns(() => _now);
 
@@ -132,7 +132,7 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing.Logging
         public void LogIsCorrect()
         {
             _sut.Log("...");
-            AssertLog("1/1/0001 12:00:00 AM ...");
+            AssertLog("1/1/0001 12:00:00 AM +00:00 ...");
         }
 
         [Test]
@@ -145,8 +145,8 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing.Logging
             _sut.Log("b");
 
             AssertLog(
-                "1/1/0001 12:00:00 AM a\n" +
-                "1/1/0001 12:00:00 AM b");
+                "1/1/0001 12:00:00 AM +00:00 a\n" +
+                "1/1/0001 12:00:00 AM +00:00 b");
         }
 
         [Test]
@@ -160,10 +160,10 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing.Logging
             _sut.Log("d");
 
             AssertLog(
-                "1/1/0001 12:00:00 AM ab\n" +
-                "1/1/0001 12:00:00 AM c\n" +
-                "1/1/0001 12:00:00 AM \n" +
-                "1/1/0001 12:00:01 AM d");
+                "1/1/0001 12:00:00 AM +00:00 ab\n" +
+                "1/1/0001 12:00:00 AM +00:00 c\n" +
+                "1/1/0001 12:00:00 AM +00:00 \n" +
+                "1/1/0001 12:00:01 AM +00:00 d");
         }
 
         [Test]
@@ -174,7 +174,7 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing.Logging
 
             AssertLog(
                 "a\n" +
-                "1/1/0001 12:00:00 AM b");
+                "1/1/0001 12:00:00 AM +00:00 b");
         }
 
         [Test]
@@ -183,7 +183,7 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing.Logging
             _sut.Log("{x}");
 
             AssertLog(
-                "1/1/0001 12:00:00 AM {x}");
+                "1/1/0001 12:00:00 AM +00:00 {x}");
         }
 
         [Test]

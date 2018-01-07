@@ -24,10 +24,10 @@ namespace KaVE.FeedbackProcessor.Tests.WatchdogExports.Transformers
     internal class TransformerTestBase<TIntervalType>
         where TIntervalType : Interval, new()
     {
-        private DateTime _referenceTime = DateTime.Now.Date;
+        private DateTimeOffset _referenceTime = DateTimeOffset.Now.Date;
         protected TransformerContext _context = new TransformerContext();
 
-        protected virtual DateTime TestTime(int timeOffsetInMinutes)
+        protected virtual DateTimeOffset TestTime(int timeOffsetInMinutes)
         {
             return _referenceTime.AddMinutes(timeOffsetInMinutes);
         }

@@ -27,12 +27,12 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing.Logging
         private ConsoleLogger _sut;
 
         private IDateUtils _dateUtils;
-        private DateTime _now;
+        private DateTimeOffset _now;
 
         [SetUp]
         public void SetUp()
         {
-            _now = DateTime.MinValue;
+            _now = DateTimeOffset.MinValue;
             _dateUtils = Mock.Of<IDateUtils>();
             Mock.Get(_dateUtils).Setup(u => u.Now).Returns(() => _now);
 

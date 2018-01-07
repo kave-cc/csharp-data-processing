@@ -31,7 +31,7 @@ namespace KaVE.FeedbackProcessor.Tests.Import
             {
                 IDESessionUUID = "sessionA",
                 TestProperty = "a",
-                TriggeredAt = new DateTime()
+                TriggeredAt = new DateTimeOffset()
             };
             GivenInputArchive("0.zip").With("0.json", @event).With("1.json", @event);
 
@@ -47,7 +47,7 @@ namespace KaVE.FeedbackProcessor.Tests.Import
             {
                 IDESessionUUID = "sessionA",
                 TestProperty = "a",
-                TriggeredAt = new DateTime()
+                TriggeredAt = new DateTimeOffset()
             };
             GivenInputArchive("0.zip").With("0.json", @event);
             GivenInputArchive("1.zip")

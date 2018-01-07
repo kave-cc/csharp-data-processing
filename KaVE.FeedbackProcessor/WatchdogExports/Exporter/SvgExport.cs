@@ -31,8 +31,8 @@ namespace KaVE.FeedbackProcessor.WatchdogExports.Exporter
         private const int MaxWidth = LabelWidth + BarWidth;
         private const int MaxHeight = 500;
 
-        private DateTime earliest;
-        private DateTime latest;
+        private DateTimeOffset earliest;
+        private DateTimeOffset latest;
 
         private SvgDocument _doc;
 
@@ -156,7 +156,7 @@ namespace KaVE.FeedbackProcessor.WatchdogExports.Exporter
         {
             var tickDelta = TimeSpan.FromSeconds(1);
             var seconds = (latest - earliest).TotalSeconds;
-            var labelDelta = (int) Math.Floor(seconds/110) + 1;
+            var labelDelta = (int) Math.Floor(seconds / 110) + 1;
 
             var num = 0;
             for (var t = earliest; t < latest; t = t + tickDelta)
@@ -164,32 +164,32 @@ namespace KaVE.FeedbackProcessor.WatchdogExports.Exporter
                 var c = GetCoords(t, t);
                 var lx = c.Start;
                 var ly = 37;
-                if (num++%labelDelta == 0)
+                if (num++ % labelDelta == 0)
                 {
                     _doc.Nodes.Add(
-                            new SvgText
+                        new SvgText
+                        {
+                            X = {lx},
+                            Y = {ly},
+                            Transforms =
                             {
-                                X = {lx},
-                                Y = {ly},
-                                Transforms =
-                                {
-                                    new SvgRotate(270, lx, ly - 3)
-                                },
-                                FontSize = 8,
-                                Nodes = {new SvgContentNode {Content = t.ToString("HH:mm:ss")}}
-                            });
+                                new SvgRotate(270, lx, ly - 3)
+                            },
+                            FontSize = 8,
+                            Nodes = {new SvgContentNode {Content = t.ToString("HH:mm:ss")}}
+                        });
                 }
                 _doc.Nodes.Add(
-                        new SvgLine
-                        {
-                            StartX = c.Start,
-                            EndX = c.Start,
-                            StartY = 37,
-                            EndY = MaxHeight,
-                            StrokeWidth = 0.5f,
-                            StrokeDashArray = new SvgUnitCollection {0.5f, 1f},
-                            Stroke = new SvgColourServer(Color.LightGray)
-                        });
+                    new SvgLine
+                    {
+                        StartX = c.Start,
+                        EndX = c.Start,
+                        StartY = 37,
+                        EndY = MaxHeight,
+                        StrokeWidth = 0.5f,
+                        StrokeDashArray = new SvgUnitCollection {0.5f, 1f},
+                        Stroke = new SvgColourServer(Color.LightGray)
+                    });
             }
         }
 
@@ -201,7 +201,9 @@ namespace KaVE.FeedbackProcessor.WatchdogExports.Exporter
                     ? Color.Green
                     : tr == TestResult.Failed
                         ? Color.RoyalBlue
-                        : tr == TestResult.Unknown ? Color.Gold : Color.LightGray;
+                        : tr == TestResult.Unknown
+                            ? Color.Gold
+                            : Color.LightGray;
         }
 
         private static SvgText Label(int row, string label)
@@ -236,11 +238,11 @@ namespace KaVE.FeedbackProcessor.WatchdogExports.Exporter
             return GetCoords(interval.StartTime, interval.EndTime);
         }
 
-        private TimeCoordinates GetCoords(DateTime startdt, DateTime enddt)
+        private TimeCoordinates GetCoords(DateTimeOffset startdt, DateTimeOffset enddt)
         {
             var wholeWidth = (latest - earliest).TotalSeconds;
-            var start = BarWidth*(startdt - earliest).TotalSeconds/wholeWidth;
-            var end = BarWidth*(enddt - earliest).TotalSeconds/wholeWidth;
+            var start = BarWidth * (startdt - earliest).TotalSeconds / wholeWidth;
+            var end = BarWidth * (enddt - earliest).TotalSeconds / wholeWidth;
             return new TimeCoordinates {Start = LabelWidth + (float) start, End = LabelWidth + (float) end};
         }
 
@@ -252,8 +254,8 @@ namespace KaVE.FeedbackProcessor.WatchdogExports.Exporter
 
         private void SetBoundaries(IEnumerable<Interval> intervals)
         {
-            earliest = DateTime.MaxValue;
-            latest = DateTime.MinValue;
+            earliest = DateTimeOffset.MaxValue;
+            latest = DateTimeOffset.MinValue;
 
             foreach (var i in intervals)
             {
@@ -290,38 +292,38 @@ namespace KaVE.FeedbackProcessor.WatchdogExports.Exporter
             var x2 = new SvgUnit(Math.Max(coords.Start, coords.End - 0.1f));
 
             var mWidth = 0.5f;
-            var m1x = new SvgUnit(Math.Min(coords.End, x1 + mWidth/2));
-            var m2x = new SvgUnit(Math.Max(coords.Start, x2 - mWidth/2));
+            var m1x = new SvgUnit(Math.Min(coords.End, x1 + mWidth / 2));
+            var m2x = new SvgUnit(Math.Max(coords.Start, x2 - mWidth / 2));
             _doc.Nodes.Add(
-                    new SvgLine
-                    {
-                        StartX = m1x,
-                        EndX = m1x,
-                        StartY = y,
-                        EndY = new SvgUnit(y - strokeWidth/2 - 1f),
-                        StrokeWidth = new SvgUnit(mWidth),
-                        Stroke = new SvgColourServer(color)
-                    });
+                new SvgLine
+                {
+                    StartX = m1x,
+                    EndX = m1x,
+                    StartY = y,
+                    EndY = new SvgUnit(y - strokeWidth / 2 - 1f),
+                    StrokeWidth = new SvgUnit(mWidth),
+                    Stroke = new SvgColourServer(color)
+                });
             _doc.Nodes.Add(
-                    new SvgLine
-                    {
-                        StartX = x1,
-                        EndX = x2,
-                        StartY = y,
-                        EndY = y,
-                        StrokeWidth = strokeWidth,
-                        Stroke = new SvgColourServer(color)
-                    });
+                new SvgLine
+                {
+                    StartX = x1,
+                    EndX = x2,
+                    StartY = y,
+                    EndY = y,
+                    StrokeWidth = strokeWidth,
+                    Stroke = new SvgColourServer(color)
+                });
             _doc.Nodes.Add(
-                    new SvgLine
-                    {
-                        StartX = m2x,
-                        EndX = m2x,
-                        StartY = y,
-                        EndY = new SvgUnit(y + strokeWidth/2 + 1f),
-                        StrokeWidth = new SvgUnit(mWidth),
-                        Stroke = new SvgColourServer(color)
-                    });
+                new SvgLine
+                {
+                    StartX = m2x,
+                    EndX = m2x,
+                    StartY = y,
+                    EndY = new SvgUnit(y + strokeWidth / 2 + 1f),
+                    StrokeWidth = new SvgUnit(mWidth),
+                    Stroke = new SvgColourServer(color)
+                });
         }
     }
 }

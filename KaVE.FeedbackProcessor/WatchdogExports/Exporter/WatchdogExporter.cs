@@ -242,7 +242,7 @@ namespace KaVE.FeedbackProcessor.WatchdogExports.Exporter
             obj.Properties.Add("ide", String("vs"));
             obj.Properties.Add("id", String(WatchdogUtils.Sha1Hash(interval.Project)));
             obj.Properties.Add("ip", String("0.0.0.0"));
-            obj.Properties.Add("regDate", Wrapped("$date", DateTime.Now.ToIsoDate()));
+            obj.Properties.Add("regDate", Wrapped("$date", DateTimeOffset.Now.ToIsoDate()));
             return obj;
         }
 
@@ -262,7 +262,7 @@ namespace KaVE.FeedbackProcessor.WatchdogExports.Exporter
             obj.Properties.Add("city", String("Unknown"));
             obj.Properties.Add("postCode", Literal("null"));
             obj.Properties.Add("ip", String("0.0.0.0"));
-            obj.Properties.Add("regDate", Wrapped("$date", DateTime.Now.ToIsoDate()));
+            obj.Properties.Add("regDate", Wrapped("$date", DateTimeOffset.Now.ToIsoDate()));
             return obj;
         }
     }

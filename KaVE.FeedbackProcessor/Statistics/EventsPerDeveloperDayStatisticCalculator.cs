@@ -80,12 +80,12 @@ namespace KaVE.FeedbackProcessor.Statistics
         {
             private readonly TimeSpan _minBreakSpan;
 
-            public DateTime Day { get; private set; }
-            public DateTime FirstActivityAt { get; private set; }
-            public DateTime LastActivityAt { get; private set; }
+            public DateTimeOffset Day { get; private set; }
+            public DateTimeOffset FirstActivityAt { get; private set; }
+            public DateTimeOffset LastActivityAt { get; private set; }
             public int NumberOfEvents { get; private set; }
 
-            public DateTime _startOfSpree;
+            public DateTimeOffset _startOfSpree;
             public IList<TimeSpan> _sprees = new List<TimeSpan>();
 
             public int NumberOfBreaks
@@ -129,7 +129,7 @@ namespace KaVE.FeedbackProcessor.Statistics
 
             private bool IsFirstEventOfDay()
             {
-                return FirstActivityAt == default(DateTime);
+                return FirstActivityAt == default(DateTimeOffset);
             }
 
             public TimeSpan TotalBreakTime
@@ -181,9 +181,9 @@ namespace KaVE.FeedbackProcessor.Statistics
                 unchecked
                 {
                     var hashCode = NumberOfEvents;
-                    hashCode = (hashCode*397) ^ Day.GetHashCode();
-                    hashCode = (hashCode*397) ^ FirstActivityAt.GetHashCode();
-                    hashCode = (hashCode*397) ^ LastActivityAt.GetHashCode();
+                    hashCode = (hashCode * 397) ^ Day.GetHashCode();
+                    hashCode = (hashCode * 397) ^ FirstActivityAt.GetHashCode();
+                    hashCode = (hashCode * 397) ^ LastActivityAt.GetHashCode();
                     return hashCode;
                 }
             }

@@ -49,7 +49,7 @@ namespace KaVE.FeedbackProcessor.Import
             var fileLoader = new FeedbackArchiveReader();
             var totalNumberOfUniqueEvents = 0;
             var totalNumberOfDuplicatedEvents = 0;
-            var nextArtificialTriggerTime = new DateTime();
+            var nextArtificialTriggerTime = new DateTimeOffset();
 
             foreach (var archive in OpenFeedbackArchives().OrderBy(NumericalFilename))
             {

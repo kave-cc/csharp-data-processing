@@ -25,8 +25,9 @@ namespace KaVE.FeedbackProcessor.WatchdogExports.Model
         public class TestClassResult
         {
             public string TestClassName { get; set; }
+
             // TODO untested (and not part of hc/eq)
-            public DateTime StartedAt { get; set; }
+            public DateTimeOffset StartedAt { get; set; }
 
             public TimeSpan Duration { get; set; }
             public TestResult Result { get; set; }
@@ -65,8 +66,8 @@ namespace KaVE.FeedbackProcessor.WatchdogExports.Model
                 unchecked
                 {
                     var hashCode = (TestClassName != null ? TestClassName.GetHashCode() : 0);
-                    hashCode = (hashCode*397) ^ (int) Result;
-                    hashCode = (hashCode*397) ^ (TestMethods != null ? TestMethods.GetHashCode() : 0);
+                    hashCode = (hashCode * 397) ^ (int) Result;
+                    hashCode = (hashCode * 397) ^ (TestMethods != null ? TestMethods.GetHashCode() : 0);
                     return hashCode;
                 }
             }
@@ -75,8 +76,9 @@ namespace KaVE.FeedbackProcessor.WatchdogExports.Model
         public class TestMethodResult
         {
             public string TestMethodName { get; set; }
+
             // TODO untested (and not part of hc/eq)
-            public DateTime StartedAt { get; set; }
+            public DateTimeOffset StartedAt { get; set; }
 
             public TimeSpan Duration { get; set; }
             public TestResult Result { get; set; }
@@ -107,7 +109,7 @@ namespace KaVE.FeedbackProcessor.WatchdogExports.Model
             {
                 unchecked
                 {
-                    return ((TestMethodName != null ? TestMethodName.GetHashCode() : 0)*397) ^ (int) Result;
+                    return ((TestMethodName != null ? TestMethodName.GetHashCode() : 0) * 397) ^ (int) Result;
                 }
             }
         }
@@ -149,9 +151,9 @@ namespace KaVE.FeedbackProcessor.WatchdogExports.Model
             unchecked
             {
                 int hashCode = base.GetHashCode();
-                hashCode = (hashCode*397) ^ (ProjectName != null ? ProjectName.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ (int) Result;
-                hashCode = (hashCode*397) ^ (TestClasses != null ? TestClasses.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (ProjectName != null ? ProjectName.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (int) Result;
+                hashCode = (hashCode * 397) ^ (TestClasses != null ? TestClasses.GetHashCode() : 0);
                 return hashCode;
             }
         }

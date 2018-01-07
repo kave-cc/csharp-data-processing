@@ -62,9 +62,9 @@ namespace KaVE.FeedbackProcessor.Tests.Statistics
             _uut.OnStreamEnds();
 
             var actuals = _uut.Statistic[someDeveloper];
-            Assert.AreEqual(new DateTime(2015, 4, 28), actuals[0].Day);
-            Assert.AreEqual(new DateTime(2015, 4, 29), actuals[1].Day);
-            Assert.AreEqual(new DateTime(2015, 4, 30), actuals[2].Day);
+            Assert.AreEqual(new DateTimeOffset(new DateTime(2015, 4, 28)), actuals[0].Day);
+            Assert.AreEqual(new DateTimeOffset(new DateTime(2015, 4, 29)), actuals[1].Day);
+            Assert.AreEqual(new DateTimeOffset(new DateTime(2015, 4, 30)), actuals[2].Day);
         }
 
         [Test]

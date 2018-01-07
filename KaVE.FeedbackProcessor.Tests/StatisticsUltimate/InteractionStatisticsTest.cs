@@ -28,8 +28,8 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
         public void DefaultValues()
         {
             var sut = new InteractionStatistics();
-            Assert.AreEqual(DateTime.MinValue, sut.DayFirst);
-            Assert.AreEqual(DateTime.MinValue, sut.DayLast);
+            Assert.AreEqual(DateTimeOffset.MinValue, sut.DayFirst);
+            Assert.AreEqual(DateTimeOffset.MinValue, sut.DayLast);
             Assert.AreEqual(0, sut.NumDays);
             Assert.AreEqual(0, sut.NumMonth);
             Assert.AreEqual(0, sut.NumEventsTotal);
@@ -47,7 +47,7 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
         [Test]
         public void SettingValues()
         {
-            var now = DateTime.Now;
+            var now = DateTimeOffset.Now;
             var sut = new InteractionStatistics
             {
                 DayFirst = now,

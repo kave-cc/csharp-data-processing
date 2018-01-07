@@ -24,8 +24,8 @@ namespace KaVE.FeedbackProcessor.StatisticsUltimate
 {
     public interface IInteractionStatistics
     {
-        DateTime DayFirst { get; }
-        DateTime DayLast { get; }
+        DateTimeOffset DayFirst { get; }
+        DateTimeOffset DayLast { get; }
         int NumDays { get; }
         int NumMonth { get; }
         int NumEventsTotal { get; }
@@ -39,8 +39,8 @@ namespace KaVE.FeedbackProcessor.StatisticsUltimate
 
     public class InteractionStatistics : IInteractionStatistics
     {
-        public DateTime DayFirst { get; set; }
-        public DateTime DayLast { get; set; }
+        public DateTimeOffset DayFirst { get; set; }
+        public DateTimeOffset DayLast { get; set; }
 
         public int NumDays { get; set; }
         public int NumMonth { get; set; }

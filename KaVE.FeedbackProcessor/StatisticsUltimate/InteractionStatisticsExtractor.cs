@@ -59,13 +59,13 @@ namespace KaVE.FeedbackProcessor.StatisticsUltimate
         public InteractionStatistics CreateStatistics(IEnumerable<IIDEEvent> events)
         {
             var stats = new InteractionStatistics();
-            var days = new HashSet<DateTime>();
-            var months = new HashSet<DateTime>();
+            var days = new HashSet<DateTimeOffset>();
+            var months = new HashSet<DateTimeOffset>();
 
-            var lastTriggeredAt = DateTime.MinValue;
+            var lastTriggeredAt = DateTimeOffset.MinValue;
 
-            DateTime? curStart = null;
-            DateTime? curEnd = null;
+            DateTimeOffset? curStart = null;
+            DateTimeOffset? curEnd = null;
 
             foreach (var t in AllEventTypes)
             {
@@ -111,21 +111,21 @@ namespace KaVE.FeedbackProcessor.StatisticsUltimate
 
                 if (!e.TriggeredAt.HasValue)
                 {
-                    e.TriggeredAt = DateTime.MinValue;
+                    e.TriggeredAt = DateTimeOffset.MinValue;
                 }
 
-                var date = e.TriggeredAt.Value.Date;
+                var date = new DateTimeOffset(e.TriggeredAt.Value.Date, e.TriggeredAt.Value.Offset);
 
                 days.Add(date);
                 var firstDayOfMonth = date.AddDays(-(date.Day - 1));
                 months.Add(firstDayOfMonth);
 
-                if (stats.DayFirst == DateTime.MinValue || date < stats.DayFirst)
+                if (stats.DayFirst == DateTimeOffset.MinValue || date < stats.DayFirst)
                 {
                     stats.DayFirst = date;
                 }
 
-                if (stats.DayLast == DateTime.MinValue || date > stats.DayLast)
+                if (stats.DayLast == DateTimeOffset.MinValue || date > stats.DayLast)
                 {
                     stats.DayLast = date;
                 }

@@ -256,7 +256,7 @@ namespace KaVE.FeedbackProcessor.Activities.SlidingWindow
 
     internal static class ActivityEventEx
     {
-        internal static Pair<ActivityEvent> SplitAt(this ActivityEvent activityEvent, DateTime at)
+        internal static Pair<ActivityEvent> SplitAt(this ActivityEvent activityEvent, DateTimeOffset at)
         {
             var head = activityEvent.Clone();
             head.TerminatedAt = at;

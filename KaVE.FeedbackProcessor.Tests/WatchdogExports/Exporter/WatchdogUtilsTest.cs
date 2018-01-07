@@ -94,7 +94,7 @@ namespace KaVE.FeedbackProcessor.Tests.WatchdogExports.Exporter
             AssertDateToTimestamp(date, expectedTimestamp);
         }
 
-        private static void AssertDateToTimestamp(DateTime date,
+        private static void AssertDateToTimestamp(DateTimeOffset date,
             long expectedTimestamp)
         {
             Console.WriteLine(date);

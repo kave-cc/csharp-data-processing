@@ -21,11 +21,11 @@ namespace KaVE.FeedbackProcessor.WatchdogExports.Model
 {
     public abstract class Interval
     {
-        public DateTime StartTime { get; set; }
+        public DateTimeOffset StartTime { get; set; }
 
         public TimeSpan Duration { get; set; }
 
-        public DateTime EndTime
+        public DateTimeOffset EndTime
         {
             get { return StartTime + Duration; }
         }
@@ -42,11 +42,11 @@ namespace KaVE.FeedbackProcessor.WatchdogExports.Model
         [NotNull]
         public string Project { get; set; }
 
-        public DateTime CreationTime { get; set; }
+        public DateTimeOffset CreationTime { get; set; }
 
         protected Interval()
         {
-            StartTime = DateTime.MinValue;
+            StartTime = DateTimeOffset.MinValue;
             Duration = TimeSpan.Zero;
             UserId = string.Empty;
             IDESessionId = string.Empty;
@@ -75,11 +75,11 @@ namespace KaVE.FeedbackProcessor.WatchdogExports.Model
             unchecked
             {
                 var hashCode = StartTime.GetHashCode();
-                hashCode = (hashCode*397) ^ Duration.GetHashCode();
-                hashCode = (hashCode*397) ^ UserId.GetHashCode();
-                hashCode = (hashCode*397) ^ IDESessionId.GetHashCode();
-                hashCode = (hashCode*397) ^ (KaVEVersion != null ? KaVEVersion.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ Project.GetHashCode();
+                hashCode = (hashCode * 397) ^ Duration.GetHashCode();
+                hashCode = (hashCode * 397) ^ UserId.GetHashCode();
+                hashCode = (hashCode * 397) ^ IDESessionId.GetHashCode();
+                hashCode = (hashCode * 397) ^ (KaVEVersion != null ? KaVEVersion.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ Project.GetHashCode();
                 return hashCode;
             }
         }

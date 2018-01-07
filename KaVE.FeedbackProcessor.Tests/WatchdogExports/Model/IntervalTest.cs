@@ -21,12 +21,17 @@ namespace KaVE.FeedbackProcessor.Tests.WatchdogExports.Model
 {
     internal class IntervalTest
     {
+        public static DateTimeOffset Today()
+        {
+            return new DateTimeOffset(DateTime.Today);
+        }
+
         [Test]
         public void EndTimeIsCorrect()
         {
-            var i = new TestInterval {StartTime = DateTime.Today, Duration = TimeSpan.FromMinutes(1)};
+            var i = new TestInterval {StartTime = Today(), Duration = TimeSpan.FromMinutes(1)};
 
-            Assert.AreEqual(DateTime.Today.AddMinutes(1), i.EndTime);
+            Assert.AreEqual(Today().AddMinutes(1), i.EndTime);
         }
 
         [Test]
@@ -41,9 +46,9 @@ namespace KaVE.FeedbackProcessor.Tests.WatchdogExports.Model
         [Test]
         public void Equality_StartTime()
         {
-            var i1 = new TestInterval {StartTime = DateTime.Today};
-            var i2 = new TestInterval {StartTime = DateTime.Today};
-            var i3 = new TestInterval {StartTime = DateTime.Today.AddMinutes(1)};
+            var i1 = new TestInterval {StartTime = Today()};
+            var i2 = new TestInterval {StartTime = Today()};
+            var i3 = new TestInterval {StartTime = Today().AddMinutes(1)};
 
             Assert.AreEqual(i1, i2);
             Assert.AreNotEqual(i2, i3);

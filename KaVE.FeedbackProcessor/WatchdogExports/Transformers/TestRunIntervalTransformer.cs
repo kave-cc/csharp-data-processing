@@ -52,8 +52,8 @@ namespace KaVE.FeedbackProcessor.WatchdogExports.Transformers
                     {
                         var testClassResult = new TestRunInterval.TestClassResult {TestClassName = testClass.Key};
 
-                        var firstStarted = DateTime.MaxValue;
-                        var lastEnded = DateTime.MinValue;
+                        var firstStarted = DateTimeOffset.MaxValue;
+                        var lastEnded = DateTimeOffset.MinValue;
 
                         foreach (var testMethod in testClass)
                         {

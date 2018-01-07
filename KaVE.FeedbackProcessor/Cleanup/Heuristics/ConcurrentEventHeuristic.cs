@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using KaVE.Commons.Model.Events;
-using KaVE.Commons.Utils.DateTimes;
 using KaVE.FeedbackProcessor.Model;
 
 namespace KaVE.FeedbackProcessor.Cleanup.Heuristics
@@ -46,9 +45,9 @@ namespace KaVE.FeedbackProcessor.Cleanup.Heuristics
             return AreSimilar(evt1.GetTriggeredAt(), evt2.GetTriggeredAt());
         }
 
-        public static bool AreSimilar(DateTime dateTime1, DateTime dateTime2)
+        public static bool AreSimilar(DateTimeOffset dateTime1, DateTimeOffset dateTime2)
         {
-            return new SimilarDateTimeComparer(EventTimeDifference.Milliseconds).Equal(dateTime1, dateTime2);
+            return new SimilarDateTimeOffsetComparer(EventTimeDifference.Milliseconds).Equal(dateTime1, dateTime2);
         }
 
         public static bool IsIgnorableTextControlCommand(string commandId)

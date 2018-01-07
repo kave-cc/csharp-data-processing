@@ -20,7 +20,6 @@ using System.Linq;
 using Ionic.Zip;
 using KaVE.Commons.Model;
 using KaVE.Commons.Model.Events;
-using KaVE.Commons.Utils;
 using KaVE.Commons.Utils.Assertion;
 using KaVE.Commons.Utils.Exceptions;
 using KaVE.FeedbackProcessor.Import;
@@ -60,10 +59,10 @@ namespace KaVE.FeedbackProcessor.WatchdogExports
                                     new PerspectiveTransformer(context),
                                     //new FileOpenTransformer(context),
                                     new FileInteractionTransformer(context)
-                                    )
-                            )
+                                )
                         )
-                    );
+                    )
+                );
             return transformer;
         }
 
@@ -88,16 +87,16 @@ namespace KaVE.FeedbackProcessor.WatchdogExports
 
             _logger.Info(@"Transforming event stream with {0} ...", transformer.GetType().Name);
 
-            var currentEventTime = DateTime.MinValue;
+            var currentEventTime = DateTimeOffset.MinValue;
             var i = 0;
             foreach (var e in events)
             {
                 i++;
-                if (i%500 == 0)
+                if (i % 500 == 0)
                 {
                     Console.Write('.');
                 }
-                if (i%50000 == 0)
+                if (i % 50000 == 0)
                 {
                     Console.WriteLine();
                 }

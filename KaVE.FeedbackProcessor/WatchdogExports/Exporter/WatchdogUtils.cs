@@ -107,15 +107,15 @@ namespace KaVE.FeedbackProcessor.WatchdogExports.Exporter
             }
         }
 
-        public static long AsUtcTimestamp(this DateTime date)
+        public static long AsUtcTimestamp(this DateTimeOffset date)
         {
-            var start = new DateTime(1970, 1, 1);
+            var start = new DateTimeOffset(new DateTime(1970, 1, 1), date.Offset);
             var unixTimestamp = date.Ticks - start.Ticks;
             unixTimestamp /= TimeSpan.TicksPerMillisecond;
             return unixTimestamp;
         }
 
-        public static string ToIsoDate(this DateTime date)
+        public static string ToIsoDate(this DateTimeOffset date)
         {
             return date.ToString("s", CultureInfo.InvariantCulture) + "Z";
         }

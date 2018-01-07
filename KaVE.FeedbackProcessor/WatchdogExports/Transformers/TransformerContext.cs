@@ -74,7 +74,7 @@ namespace KaVE.FeedbackProcessor.WatchdogExports.Transformers
             return Enumerable.Empty<Interval>();
         }
 
-        public void UpdateDurationForIntervalToMaximum([NotNull] Interval i, DateTime newPossibleEnd)
+        public void UpdateDurationForIntervalToMaximum([NotNull] Interval i, DateTimeOffset newPossibleEnd)
         {
             Asserts.NotNull(i);
             var newDuration = newPossibleEnd - i.StartTime;
@@ -84,7 +84,7 @@ namespace KaVE.FeedbackProcessor.WatchdogExports.Transformers
             }
         }
 
-        public void UpdateDurationForIntervalToThis([NotNull] Interval i, DateTime newEnforcedEnd)
+        public void UpdateDurationForIntervalToThis([NotNull] Interval i, DateTimeOffset newEnforcedEnd)
         {
             Asserts.NotNull(i);
             i.Duration = newEnforcedEnd - i.StartTime;

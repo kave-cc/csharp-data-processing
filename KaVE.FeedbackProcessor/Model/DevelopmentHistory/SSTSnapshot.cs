@@ -16,15 +16,13 @@
 
 using System;
 using KaVE.Commons.Model.Events.CompletionEvents;
-using KaVE.Commons.Model.ObjectUsage;
-using KaVE.Commons.Utils.ObjectUsageExport;
 
 namespace KaVE.FeedbackProcessor.Model.DevelopmentHistory
 {
     public class SSTSnapshot
     {
         public string WorkPeriodId { get; set; }
-        public DateTime Timestamp { get; set; }
+        public DateTimeOffset Timestamp { get; set; }
         public Context Context { get; set; }
     }
 }

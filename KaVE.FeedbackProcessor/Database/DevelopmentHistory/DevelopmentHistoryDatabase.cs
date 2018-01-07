@@ -54,7 +54,7 @@ namespace KaVE.FeedbackProcessor.Database.DevelopmentHistory
             new SQLiteCommand(commandText, _connection).ExecuteNonQuery();
         }
 
-        public void Insert(string wp, DateTime timestamp, Context context, Query query)
+        public void Insert(string wp, DateTimeOffset timestamp, Context context, Query query)
         {
             var command = new SQLiteCommand(
                 "INSERT INTO ContextHistories (WorkPeriod, Timestamp, TargetType, Context) VALUES (@wp, @timestamp, @targetType, @ctx)",
@@ -66,7 +66,7 @@ namespace KaVE.FeedbackProcessor.Database.DevelopmentHistory
             command.ExecuteNonQuery();
         }
 
-        public void Insert(string wp, DateTime timestamp, Query objectUsage, bool isQuery)
+        public void Insert(string wp, DateTimeOffset timestamp, Query objectUsage, bool isQuery)
         {
             var command = new SQLiteCommand(
                 "INSERT INTO OUHistories (WorkPeriod, Timestamp, EnclosingMethod, TargetType, ObjectUsage, IsQuery) VALUES (@wp, @timestamp, @em, @targetType, @ou, @isQuery)",
@@ -91,7 +91,7 @@ namespace KaVE.FeedbackProcessor.Database.DevelopmentHistory
                     var snapshot = new SSTSnapshot
                     {
                         WorkPeriodId = (string) result["WPId"],
-                        Timestamp = (DateTime) result["Timestamp"],
+                        Timestamp = (DateTimeOffset) result["Timestamp"],
                         Context = ((string) result["SST"]).ParseJsonTo<Context>()
                     };
                     history.Add(snapshot);

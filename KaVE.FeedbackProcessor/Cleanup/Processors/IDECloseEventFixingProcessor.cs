@@ -25,7 +25,7 @@ namespace KaVE.FeedbackProcessor.Cleanup.Processors
     {
         private bool _firstEvent;
         private bool _ideIsRunning;
-        private DateTime _lastEventTriggerTime;
+        private DateTimeOffset _lastEventTriggerTime;
 
         public IDECloseEventFixingProcessor()
         {
@@ -37,7 +37,7 @@ namespace KaVE.FeedbackProcessor.Cleanup.Processors
         {
             _firstEvent = true;
             _ideIsRunning = false;
-            _lastEventTriggerTime = default(DateTime);
+            _lastEventTriggerTime = default(DateTimeOffset);
         }
 
         private void ProcessIDEStateEvent(IDEStateEvent @event)
@@ -69,7 +69,7 @@ namespace KaVE.FeedbackProcessor.Cleanup.Processors
             _firstEvent = false;
         }
 
-        private static IDEStateEvent CreateMissingStartupEvent(DateTime subsequentEventTime)
+        private static IDEStateEvent CreateMissingStartupEvent(DateTimeOffset subsequentEventTime)
         {
             return new IDEStateEvent
             {
@@ -78,7 +78,7 @@ namespace KaVE.FeedbackProcessor.Cleanup.Processors
             };
         }
 
-        private static IDEStateEvent CreateMissingShutdownEvent(DateTime previousEventTime)
+        private static IDEStateEvent CreateMissingShutdownEvent(DateTimeOffset previousEventTime)
         {
             return new IDEStateEvent
             {

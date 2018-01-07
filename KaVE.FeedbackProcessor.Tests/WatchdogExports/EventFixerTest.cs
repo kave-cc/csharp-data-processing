@@ -151,14 +151,14 @@ namespace KaVE.FeedbackProcessor.Tests.WatchdogExports
             CollectionAssert.AreEqual(expecteds, actuals);
         }
 
-        private DateTime Date(int i)
+        private DateTimeOffset Date(int i)
         {
-            return DateTime.MinValue.AddSeconds(i);
+            return DateTimeOffset.MinValue.AddSeconds(i);
         }
 
         private TimeSpan Dur(int i)
         {
-            return DateTime.MinValue.AddSeconds(i) - DateTime.MinValue;
+            return DateTimeOffset.MinValue.AddSeconds(i) - DateTimeOffset.MinValue;
         }
     }
 }

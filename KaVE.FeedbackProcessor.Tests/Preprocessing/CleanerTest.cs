@@ -59,7 +59,7 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing
             return new CommandEvent
             {
                 CommandId = id,
-                TriggeredAt = DateTime.MinValue.AddSeconds(timeOffset)
+                TriggeredAt = DateTimeOffset.MinValue.AddSeconds(timeOffset)
             };
         }
 

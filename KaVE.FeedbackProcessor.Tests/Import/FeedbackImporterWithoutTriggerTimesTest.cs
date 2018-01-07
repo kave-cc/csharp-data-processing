@@ -38,7 +38,7 @@ namespace KaVE.FeedbackProcessor.Tests.Import
         [Test]
         public void DoesNotOverwriteExistingTriggerTime()
         {
-            var originalTriggerTime = new DateTime(2015, 4, 21);
+            var originalTriggerTime = new DateTimeOffset(new DateTime(2015, 4, 21));
             GivenInputArchive("1.zip").With("0.json", new TestIDEEvent {TriggeredAt = originalTriggerTime});
 
             WhenImportIsRun();

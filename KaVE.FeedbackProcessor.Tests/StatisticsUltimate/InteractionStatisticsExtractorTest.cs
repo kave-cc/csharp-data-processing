@@ -55,8 +55,8 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
             Assert.AreEqual(4, actual.NumEventsTotal);
             Assert.AreEqual(3, actual.NumDays);
             Assert.AreEqual(2, actual.NumMonth);
-            Assert.AreEqual(GetTime(1234, 5, 6).Date, actual.DayFirst);
-            Assert.AreEqual(GetTime(1234, 8, 9).Date, actual.DayLast);
+            Assert.AreEqual(GetTime_Exact(1234, 5, 6), actual.DayFirst);
+            Assert.AreEqual(GetTime_Exact(1234, 8, 9), actual.DayLast);
         }
 
         [Test]
@@ -73,8 +73,8 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
             Assert.AreEqual(4, actual.NumEventsTotal);
             Assert.AreEqual(3, actual.NumDays);
             Assert.AreEqual(2, actual.NumMonth);
-            Assert.AreEqual(GetTime(1234, 5, 6).Date, actual.DayFirst);
-            Assert.AreEqual(GetTime(1234, 8, 9).Date, actual.DayLast);
+            Assert.AreEqual(GetTime_Exact(1234, 5, 6), actual.DayFirst);
+            Assert.AreEqual(GetTime_Exact(1234, 8, 9), actual.DayLast);
         }
 
         [Test]
@@ -91,8 +91,8 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
             Assert.AreEqual(1, actual.NumEventsTotal);
             Assert.AreEqual(1, actual.NumDays);
             Assert.AreEqual(1, actual.NumMonth);
-            Assert.AreEqual(DateTime.MinValue.Date, actual.DayFirst);
-            Assert.AreEqual(DateTime.MinValue.Date, actual.DayLast);
+            Assert.AreEqual(DateTimeOffset.MinValue, actual.DayFirst);
+            Assert.AreEqual(DateTimeOffset.MinValue, actual.DayLast);
         }
 
         [Test]
@@ -306,13 +306,22 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
             return new ActivityEvent {TriggeredAt = GetTime(year, month, day)};
         }
 
-        private DateTime GetTime(int year, int month, int day)
+        private DateTimeOffset GetTime(int year, int month, int day)
         {
             var date =
-                DateTime.MinValue.AddYears(year - 1)
-                        .AddMonths(month - 1)
-                        .AddDays(day - 1)
-                        .AddSeconds(_rng.Next() % 60);
+                DateTimeOffset.MinValue.AddYears(year - 1)
+                              .AddMonths(month - 1)
+                              .AddDays(day - 1)
+                              .AddSeconds(_rng.Next() % 60);
+            return date;
+        }
+
+        private DateTimeOffset GetTime_Exact(int year, int month, int day)
+        {
+            var date =
+                DateTimeOffset.MinValue.AddYears(year - 1)
+                              .AddMonths(month - 1)
+                              .AddDays(day - 1);
             return date;
         }
     }

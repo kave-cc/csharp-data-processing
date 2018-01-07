@@ -26,7 +26,7 @@ namespace KaVE.FeedbackProcessor.Tests.Model
         [Test]
         public void GetsTriggeredAtIfSet()
         {
-            var someDateTime = new DateTime();
+            var someDateTime = new DateTimeOffset();
             var ideEvent = TestEventFactory.SomeEvent();
             ideEvent.TriggeredAt = someDateTime;
 

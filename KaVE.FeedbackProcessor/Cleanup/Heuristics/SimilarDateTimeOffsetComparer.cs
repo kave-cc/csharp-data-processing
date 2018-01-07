@@ -15,24 +15,28 @@
  */
 
 using System;
+using System.Collections.Generic;
 
-namespace KaVE.FeedbackProcessor.Tests.TestUtils
+namespace KaVE.FeedbackProcessor.Cleanup.Heuristics
 {
-    internal class DateTimeFactory
+    public class SimilarDateTimeOffsetComparer : IComparer<DateTimeOffset>
     {
-        private static readonly DateTimeOffset BaseDate = new DateTime(2014, 02, 13, 8, 0, 0);
-        private static readonly TimeSpan TenHourSpan = TimeSpan.FromHours(10);
+        private readonly int _diffMillis;
 
-        public static readonly Random Random = new Random();
-
-        public static DateTimeOffset SomeWorkingHoursDateTime()
+        public SimilarDateTimeOffsetComparer(int diffMillis)
         {
-            return BaseDate + SomeTimeSpan(TenHourSpan);
+            _diffMillis = diffMillis;
         }
 
-        private static TimeSpan SomeTimeSpan(TimeSpan max)
+        public int Compare(DateTimeOffset x, DateTimeOffset y)
         {
-            return TimeSpan.FromSeconds(Random.Next(0, (int) max.TotalSeconds));
+            var diff = Math.Abs((x - y).TotalMilliseconds);
+            return (diff <= _diffMillis) ? 0 : x.CompareTo(y);
+        }
+
+        public bool Equal(DateTimeOffset x, DateTimeOffset y)
+        {
+            return Compare(x, y) == 0;
         }
     }
 }
