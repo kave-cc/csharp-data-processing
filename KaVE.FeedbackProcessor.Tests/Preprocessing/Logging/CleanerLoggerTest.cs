@@ -34,7 +34,7 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing.Logging
         public void IntegrationTest()
         {
             _sut.WorkingIn("<dirIn>", "<dirOut>");
-            _sut.RegisteredFilters(new[] {"f1", "f2"});
+            _sut.RegisteredConfig(new[] {"f1", "f2"}, new[] {"fix3", "fix4"});
             _sut.ReadingZip("a");
             _sut.WritingEvents();
             _sut.FinishedWriting(new Dictionary<string, int> {{"f1", 1}, {"f2", 2}});
@@ -54,6 +54,10 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing.Logging
                 "- f1",
                 "- f2",
                 "",
+                "registered fixers:",
+                "- fix3",
+                "- fix4",
+                "",
                 "#### zip: a",
                 "reading... done",
                 "writing... done",
@@ -69,7 +73,7 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing.Logging
         public void IntegrationTest_TwoTimes()
         {
             _sut.WorkingIn("<dirIn>", "<dirOut>");
-            _sut.RegisteredFilters(new[] {"f1", "f2"});
+            _sut.RegisteredConfig(new[] {"f1", "f2"}, new[] {"fix3", "fix4"});
 
             _sut.ReadingZip("a");
             _sut.WritingEvents();
@@ -94,6 +98,10 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing.Logging
                 "registered filters:",
                 "- f1",
                 "- f2",
+                "",
+                "registered fixers:",
+                "- fix3",
+                "- fix4",
                 "",
                 "#### zip: a",
                 "reading... done",

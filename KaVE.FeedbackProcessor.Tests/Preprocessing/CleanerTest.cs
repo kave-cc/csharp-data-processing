@@ -51,11 +51,13 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing
                 .Setup(l => l.FinishedWriting(It.IsAny<IDictionary<string, int>>()))
                 .Callback<IDictionary<string, int>>(d => _reportedCounts.Add(d));
             Mock.Get(_log)
-                .Setup(l => l.RegisteredFilters(It.IsAny<IEnumerable<string>>()))
-                .Callback<IEnumerable<string>>(fs => _registeredFilters.AddAll(fs));
-            Mock.Get(_log)
-                .Setup(l => l.RegisteredFixers(It.IsAny<IEnumerable<string>>()))
-                .Callback<IEnumerable<string>>(fs => _registeredFilters.AddAll(fs));
+                .Setup(l => l.RegisteredConfig(It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>()))
+                .Callback<IEnumerable<string>, IEnumerable<string>>(
+                    (filters, fixers) =>
+                    {
+                        _registeredFilters.AddAll(filters);
+                        _registeredFixers.AddAll(fixers);
+                    });
 
             _sut = new Cleaner(Io, _log);
         }
@@ -186,7 +188,9 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing
             _sut.Dispose();
 
             Mock.Get(_log).Verify(l => l.WorkingIn(MergedDir + @"\", FinalDir + @"\"), Times.Exactly(1));
-            Mock.Get(_log).Verify(l => l.RegisteredFilters(It.IsAny<IEnumerable<string>>()), Times.Exactly(1));
+            Mock.Get(_log).Verify(
+                l => l.RegisteredConfig(It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>()),
+                Times.Exactly(1));
             Mock.Get(_log).Verify(l => l.ReadingZip("a"), Times.Exactly(1));
             Mock.Get(_log).Verify(l => l.ReadingZip("b"), Times.Exactly(1));
             Mock.Get(_log).Verify(l => l.WritingEvents(), Times.Exactly(2));
