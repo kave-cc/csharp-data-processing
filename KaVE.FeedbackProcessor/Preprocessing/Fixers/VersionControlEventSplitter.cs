@@ -16,6 +16,7 @@
 
 using System.Collections.Generic;
 using KaVE.Commons.Model.Events;
+using KaVE.Commons.Model.Events.VersionControlEvents;
 
 namespace KaVE.FeedbackProcessor.Preprocessing.Fixers
 {
@@ -23,7 +24,36 @@ namespace KaVE.FeedbackProcessor.Preprocessing.Fixers
     {
         public override IEnumerable<IDEEvent> Process(IDEEvent e)
         {
-            yield return e;
+            var vce = e as VersionControlEvent;
+            if (vce == null)
+            {
+                yield return e;
+            }
+            else
+            {
+                foreach (var a in vce.Actions)
+                {
+                    var clone = new VersionControlEvent
+                    {
+                        // ide event
+                        Id = vce.Id,
+                        KaVEVersion = vce.KaVEVersion,
+                        IDESessionUUID = vce.IDESessionUUID,
+
+                        TriggeredAt = a.ExecutedAt, // override with time of version control action
+                        TriggeredBy = vce.TriggeredBy,
+                        Duration = vce.Duration,
+
+                        ActiveDocument = vce.ActiveDocument,
+                        ActiveWindow = vce.ActiveWindow,
+
+                        // version control event
+                        Solution = vce.Solution,
+                        Actions = {a}
+                    };
+                    yield return clone;
+                }
+            }
         }
     }
 }

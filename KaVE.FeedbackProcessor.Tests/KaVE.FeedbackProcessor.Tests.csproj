@@ -108,6 +108,7 @@
     <Compile Include="EditLocation\RelativeEditLocationTest.cs" />
     <Compile Include="Preprocessing\FileBasedPreprocessingTestBase.cs" />
     <Compile Include="Preprocessing\Filters\ErrorAndInfoEventFilterTest.cs" />
+    <Compile Include="Preprocessing\Fixers\VersionContorlEventSplitterTest.cs" />
     <Compile Include="Preprocessing\GrouperTest.cs" />
     <Compile Include="Preprocessing\GroupMergerTest.cs" />
     <Compile Include="Preprocessing\IdReaderTest.cs" />
