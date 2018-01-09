@@ -288,7 +288,7 @@ namespace KaVE.FeedbackProcessor.Tests.StatisticsUltimate
 
         private static IIDEEvent E(int startTimeInS, int duration)
         {
-            var startTime = DateTime.Now.AddSeconds(startTimeInS);
+            var startTime = DateTimeOffset.MinValue.AddSeconds(startTimeInS);
             return new WindowEvent
             {
                 TriggeredAt = startTime,
