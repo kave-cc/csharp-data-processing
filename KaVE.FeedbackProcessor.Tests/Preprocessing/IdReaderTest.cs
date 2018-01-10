@@ -20,10 +20,12 @@ using KaVE.Commons.Model.Events;
 using KaVE.Commons.Model.Events.UserProfiles;
 using KaVE.Commons.Utils.Assertion;
 using KaVE.Commons.Utils.Collections;
+using KaVE.Commons.Utils.IO.Archives;
 using KaVE.Commons.Utils.Json;
 using KaVE.FeedbackProcessor.Preprocessing;
 using KaVE.FeedbackProcessor.Preprocessing.Logging;
 using Moq;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace KaVE.FeedbackProcessor.Tests.Preprocessing
@@ -79,6 +81,23 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing
                 new UserProfileEvent {ProfileId = "p1"});
 
             AssertIds("sid:s1", "sid:s2", "pid:p1");
+        }
+
+        [Test]
+        public void BrokenEventsDoNotStopReaderAndAreReported()
+        {
+            var zip = Path.Combine(RawDir, "a.zip");
+            using (var wa = new WritingArchive(zip))
+            {
+                wa.Add(new CommandEvent {IDESessionUUID = "s1"});
+                wa.AddAsPlainText("xxx");
+                wa.Add(new CommandEvent {IDESessionUUID = "s2"});
+                wa.AddAsPlainText("xxx");
+                wa.Add(new CommandEvent {IDESessionUUID = "s3"});
+            }
+
+            AssertIds("sid:s1", "sid:s2", "sid:s3");
+            Mock.Get(_log).Verify(l => l.DeserializationError(zip, It.IsAny<JsonReaderException>()), Times.Exactly(2));
         }
 
         [Test]

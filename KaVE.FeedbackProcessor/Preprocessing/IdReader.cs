@@ -20,9 +20,9 @@ using KaVE.Commons.Model.Events;
 using KaVE.Commons.Model.Events.UserProfiles;
 using KaVE.Commons.Utils.Assertion;
 using KaVE.Commons.Utils.Collections;
-using KaVE.Commons.Utils.IO.Archives;
 using KaVE.Commons.Utils.Json;
 using KaVE.FeedbackProcessor.Preprocessing.Logging;
+using KaVE.FeedbackProcessor.Preprocessing.Model;
 using KaVE.JetBrains.Annotations;
 
 namespace KaVE.FeedbackProcessor.Preprocessing
@@ -93,7 +93,7 @@ namespace KaVE.FeedbackProcessor.Preprocessing
             return ids;
         }
 
-        private static IKaVESet<string> ReadZip(string zip)
+        private IKaVESet<string> ReadZip(string zip)
         {
             var ids = Sets.NewHashSet<string>();
 
@@ -121,13 +121,13 @@ namespace KaVE.FeedbackProcessor.Preprocessing
             return ids;
         }
 
-        private static IEnumerable<IDEEvent> GetEventsFromArchive(string zip)
+        private IEnumerable<IDEEvent> GetEventsFromArchive(string zip)
         {
-            using (var ra = new ReadingArchive(zip))
+            using (var ra = new FailsafeIDEEventReadingArchive(zip, ex => _log.DeserializationError(zip, ex)))
             {
-                while (ra.HasNext())
+                foreach (var e in ra.ReadAllLazy())
                 {
-                    yield return ra.GetNext<IDEEvent>();
+                    yield return e;
                 }
             }
         }

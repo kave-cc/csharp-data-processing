@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using System;
 using System.Collections.Generic;
 
 namespace KaVE.FeedbackProcessor.Preprocessing.Logging
@@ -24,6 +25,7 @@ namespace KaVE.FeedbackProcessor.Preprocessing.Logging
         void CacheHit();
         void CacheMiss();
         void FoundIds(IEnumerable<string> ids);
+        void DeserializationError(string zip, Exception exception);
     }
 
     public class IdReaderLogger : IIdReaderLogger
@@ -62,6 +64,11 @@ namespace KaVE.FeedbackProcessor.Preprocessing.Logging
             {
                 _log.Log("- {0}", id);
             }
+        }
+
+        public void DeserializationError(string zip, Exception ex)
+        {
+            _log.Log("{0} during deserialization of {1}: {2}", ex.GetType(), zip, ex.Message);
         }
     }
 }
