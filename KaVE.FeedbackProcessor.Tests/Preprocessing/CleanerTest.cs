@@ -20,11 +20,13 @@ using System.IO;
 using KaVE.Commons.Model.Events;
 using KaVE.Commons.Utils.Assertion;
 using KaVE.Commons.Utils.Collections;
+using KaVE.Commons.Utils.IO.Archives;
 using KaVE.FeedbackProcessor.Preprocessing;
 using KaVE.FeedbackProcessor.Preprocessing.Filters;
 using KaVE.FeedbackProcessor.Preprocessing.Fixers;
 using KaVE.FeedbackProcessor.Preprocessing.Logging;
 using Moq;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace KaVE.FeedbackProcessor.Tests.Preprocessing
@@ -162,6 +164,25 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing
             Clean("a");
 
             AssertEvents("a", E("a", 10), E("b", 20), E("b", 21), E("c", 30));
+        }
+
+        [Test]
+        public void DeserializationIssuesNoNotCrashTheCleanerAndAreReported()
+        {
+            var zip = Path.Combine(MergedDir, "a.zip");
+            using (var wa = new WritingArchive(zip))
+            {
+                wa.Add(E("a", 10));
+                wa.AddAsPlainText("xxx");
+                wa.Add(E("a", 20));
+                wa.AddAsPlainText("yyy");
+                wa.Add(E("a", 30));
+            }
+
+            Clean("a.zip");
+
+            AssertEvents("a.zip", E("a", 10), E("a", 20), E("a", 30));
+            Mock.Get(_log).Verify(l => l.DeserializationError(zip, It.IsAny<JsonReaderException>()), Times.Exactly(2));
         }
 
         [Test, ExpectedException(typeof(AssertException))]

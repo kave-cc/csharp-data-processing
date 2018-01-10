@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
+using System;
 using System.Collections.Generic;
+using KaVE.Commons.Utils.Exceptions;
 using KaVE.FeedbackProcessor.Preprocessing.Logging;
 using NUnit.Framework;
 
@@ -67,6 +69,24 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing.Logging
                 "#### cleaning stats over all files ####",
                 "- f1: 1",
                 "- f2: 2");
+        }
+
+        [Test]
+        public void ReadingWithFailure()
+        {
+            // skip intro ...
+            _sut.ReadingZip("a");
+            _sut.DeserializationError("abc.zip", new ValidationException("xyz", new Exception()));
+            _sut.WritingEvents();
+            // skip rest ...
+
+            AssertLog(
+                "",
+                "#### zip: a",
+                "reading... ",
+                "KaVE.Commons.Utils.Exceptions.ValidationException during deserialization of abc.zip: xyz",
+                "done",
+                "writing... ");
         }
 
         [Test]
