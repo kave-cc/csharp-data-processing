@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
+using System;
 using KaVE.Commons.Utils;
+using KaVE.Commons.Utils.Exceptions;
 using KaVE.FeedbackProcessor.Preprocessing.Logging;
 using NUnit.Framework;
+using ConsoleLogger = KaVE.FeedbackProcessor.Preprocessing.Logging.ConsoleLogger;
 
 namespace KaVE.FeedbackProcessor.Tests.Preprocessing.Logging
 {
@@ -36,6 +39,18 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing.Logging
             _sut.WorkingIn("<in>", "<out>");
             _sut.NextGroup(3, "a");
             _sut.Reading("a");
+            _sut.Reading("b");
+            _sut.Reading("c");
+            _sut.Result(123);
+        }
+
+        [Test]
+        public void IntegrationWithFailingReads()
+        {
+            _sut.WorkingIn("<in>", "<out>");
+            _sut.NextGroup(3, "a");
+            _sut.Reading("a");
+            _sut.DeserializationError("abc.zip", new ValidationException("foo", new Exception()));
             _sut.Reading("b");
             _sut.Reading("c");
             _sut.Result(123);

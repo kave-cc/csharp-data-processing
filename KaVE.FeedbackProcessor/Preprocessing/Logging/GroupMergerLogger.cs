@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+using System;
+
 namespace KaVE.FeedbackProcessor.Preprocessing.Logging
 {
     public interface IGroupMergerLogger
@@ -22,6 +24,7 @@ namespace KaVE.FeedbackProcessor.Preprocessing.Logging
         void Reading(string relZip);
         void Result(int numEvents);
         void WorkingIn(string getFullPathRaw, string getFullPathMerged);
+        void DeserializationError(string zip, Exception ex);
     }
 
     public class GroupMergerLogger : IGroupMergerLogger
@@ -60,6 +63,11 @@ namespace KaVE.FeedbackProcessor.Preprocessing.Logging
             _log.Log("working directories:");
             _log.Log("- in: {0}", dirIn);
             _log.Log("- out: {0}", dirOut);
+        }
+
+        public void DeserializationError(string zip, Exception ex)
+        {
+            _log.Log("{0} during deserialization of {1}: {2}", ex.GetType(), zip, ex.Message);
         }
     }
 }

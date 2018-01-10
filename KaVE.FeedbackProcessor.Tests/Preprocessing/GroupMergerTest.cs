@@ -22,6 +22,7 @@ using KaVE.Commons.Utils.IO.Archives;
 using KaVE.FeedbackProcessor.Preprocessing;
 using KaVE.FeedbackProcessor.Preprocessing.Logging;
 using Moq;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace KaVE.FeedbackProcessor.Tests.Preprocessing
@@ -96,6 +97,26 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing
 
             Expect(@"a.zip", Event("a"), Event("b"), Event("c"));
             AssertNonExistence(@"b.zip", @"sub\c.zip");
+        }
+
+        [Test]
+        public void BrokenEventsDoNotStopMergingAndAreReported()
+        {
+            Add(@"a.zip", Event("a"));
+            var zip = Path.Combine(RawDir, "b.zip");
+            using (var wa = new WritingArchive(zip))
+            {
+                wa.Add(Event("b1"));
+                wa.AddAsPlainText("xxx");
+                wa.Add(Event("b2"));
+                wa.AddAsPlainText("xxx");
+                wa.Add(Event("b3"));
+            }
+
+            Merge(@"a.zip", @"b.zip");
+
+            Expect(@"a.zip", Event("a"), Event("b1"), Event("b2"), Event("b3"));
+            Mock.Get(_log).Verify(l => l.DeserializationError(zip, It.IsAny<JsonReaderException>()), Times.Exactly(2));
         }
 
         [Test]
