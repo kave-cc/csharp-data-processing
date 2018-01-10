@@ -116,7 +116,12 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing
             Merge(@"a.zip", @"b.zip");
 
             Expect(@"a.zip", Event("a"), Event("b1"), Event("b2"), Event("b3"));
-            Mock.Get(_log).Verify(l => l.DeserializationError(zip, It.IsAny<JsonReaderException>()), Times.Exactly(2));
+            Mock.Get(_log).Verify(
+                l => l.DeserializationError(zip, "1.json", It.IsAny<JsonReaderException>()),
+                Times.Once);
+            Mock.Get(_log).Verify(
+                l => l.DeserializationError(zip, "3.json", It.IsAny<JsonReaderException>()),
+                Times.Once);
         }
 
         [Test]

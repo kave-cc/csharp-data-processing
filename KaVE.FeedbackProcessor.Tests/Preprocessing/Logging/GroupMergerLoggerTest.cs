@@ -50,7 +50,7 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing.Logging
             _sut.WorkingIn("<in>", "<out>");
             _sut.NextGroup(3, "a");
             _sut.Reading("a");
-            _sut.DeserializationError("abc.zip", new ValidationException("foo", new Exception()));
+            _sut.DeserializationError("abc.zip", "123.json", new ValidationException("foo", new Exception()));
             _sut.Reading("b");
             _sut.Reading("c");
             _sut.Result(123);

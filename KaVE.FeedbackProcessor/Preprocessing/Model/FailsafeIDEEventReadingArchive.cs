@@ -23,10 +23,10 @@ namespace KaVE.FeedbackProcessor.Preprocessing.Model
 {
     public class FailsafeIDEEventReadingArchive : IDisposable
     {
-        private readonly Action<Exception> _log;
+        private readonly Action<string, Exception> _log;
         private readonly ReadingArchive _ra;
 
-        public FailsafeIDEEventReadingArchive(string zip, Action<Exception> log)
+        public FailsafeIDEEventReadingArchive(string zip, Action<string, Exception> log)
         {
             _log = log;
             _ra = new ReadingArchive(zip);
@@ -48,7 +48,7 @@ namespace KaVE.FeedbackProcessor.Preprocessing.Model
                 }
                 catch (Exception ex)
                 {
-                    _log(ex);
+                    _log(_ra.CurrentInternalFileName, ex);
                 }
                 if (e != null)
                 {

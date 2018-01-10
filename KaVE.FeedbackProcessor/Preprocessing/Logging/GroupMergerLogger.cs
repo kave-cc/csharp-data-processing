@@ -24,7 +24,7 @@ namespace KaVE.FeedbackProcessor.Preprocessing.Logging
         void Reading(string relZip);
         void Result(int numEvents);
         void WorkingIn(string getFullPathRaw, string getFullPathMerged);
-        void DeserializationError(string zip, Exception ex);
+        void DeserializationError(string zip, string internalFile, Exception ex);
     }
 
     public class GroupMergerLogger : IGroupMergerLogger
@@ -65,9 +65,9 @@ namespace KaVE.FeedbackProcessor.Preprocessing.Logging
             _log.Log("- out: {0}", dirOut);
         }
 
-        public void DeserializationError(string zip, Exception ex)
+        public void DeserializationError(string zip, string internalFile, Exception ex)
         {
-            _log.Log("{0} during deserialization of {1}: {2}", ex.GetType(), zip, ex.Message);
+            _log.Log("{0} during deserialization of {1} ({2}): {3}", ex.GetType(), zip, internalFile, ex.Message);
         }
     }
 }

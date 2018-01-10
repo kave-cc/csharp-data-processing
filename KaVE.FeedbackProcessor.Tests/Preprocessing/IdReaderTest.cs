@@ -97,7 +97,12 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing
             }
 
             AssertIds("sid:s1", "sid:s2", "sid:s3");
-            Mock.Get(_log).Verify(l => l.DeserializationError(zip, It.IsAny<JsonReaderException>()), Times.Exactly(2));
+            Mock.Get(_log).Verify(
+                l => l.DeserializationError(zip, "1.json", It.IsAny<JsonReaderException>()),
+                Times.Once);
+            Mock.Get(_log).Verify(
+                l => l.DeserializationError(zip, "3.json", It.IsAny<JsonReaderException>()),
+                Times.Once);
         }
 
         [Test]

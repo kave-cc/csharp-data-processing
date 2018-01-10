@@ -48,7 +48,7 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing.Model
         public void CanReadAllEvents()
         {
             var actuals = new List<IDEEvent>();
-            using (var sut = new FailsafeIDEEventReadingArchive(_zip, _ => { }))
+            using (var sut = new FailsafeIDEEventReadingArchive(_zip, (f, ex) => { }))
             {
                 foreach (var e in sut.ReadAllLazy())
                 {
@@ -62,12 +62,20 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing.Model
         [Test]
         public void ReportsException()
         {
+            string internalFile = null;
             Exception e = null;
-            using (var sut = new FailsafeIDEEventReadingArchive(_zip, ex => { e = ex; }))
+            using (var sut = new FailsafeIDEEventReadingArchive(
+                _zip,
+                (f, ex) =>
+                {
+                    internalFile = f;
+                    e = ex;
+                }))
             {
                 // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
                 sut.ReadAllLazy().ToList();
             }
+            Assert.AreEqual("1.json", internalFile);
             Assert.That(e is JsonReaderException);
         }
 
@@ -80,7 +88,7 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing.Model
                 wa.Add(Event(2));
             }
             Exception e = null;
-            using (var sut = new FailsafeIDEEventReadingArchive(_zip, ex => { e = ex; }))
+            using (var sut = new FailsafeIDEEventReadingArchive(_zip, (f, ex) => { e = ex; }))
             {
                 // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
                 sut.ReadAllLazy().ToList();

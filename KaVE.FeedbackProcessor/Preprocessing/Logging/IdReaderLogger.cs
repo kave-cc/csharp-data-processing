@@ -25,7 +25,7 @@ namespace KaVE.FeedbackProcessor.Preprocessing.Logging
         void CacheHit();
         void CacheMiss();
         void FoundIds(IEnumerable<string> ids);
-        void DeserializationError(string zip, Exception exception);
+        void DeserializationError(string zip, string internalFile, Exception exception);
     }
 
     public class IdReaderLogger : IIdReaderLogger
@@ -66,9 +66,9 @@ namespace KaVE.FeedbackProcessor.Preprocessing.Logging
             }
         }
 
-        public void DeserializationError(string zip, Exception ex)
+        public void DeserializationError(string zip, string internalFile, Exception ex)
         {
-            _log.Log("{0} during deserialization of {1}: {2}", ex.GetType(), zip, ex.Message);
+            _log.Log("{0} during deserialization of {1} ({2}): {3}", ex.GetType(), zip, internalFile, ex.Message);
         }
     }
 }

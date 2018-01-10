@@ -182,7 +182,12 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing
             Clean("a.zip");
 
             AssertEvents("a.zip", E("a", 10), E("a", 20), E("a", 30));
-            Mock.Get(_log).Verify(l => l.DeserializationError(zip, It.IsAny<JsonReaderException>()), Times.Exactly(2));
+            Mock.Get(_log).Verify(
+                l => l.DeserializationError(zip, "1.json", It.IsAny<JsonReaderException>()),
+                Times.Once);
+            Mock.Get(_log).Verify(
+                l => l.DeserializationError(zip, "3.json", It.IsAny<JsonReaderException>()),
+                Times.Once);
         }
 
         [Test, ExpectedException(typeof(AssertException))]

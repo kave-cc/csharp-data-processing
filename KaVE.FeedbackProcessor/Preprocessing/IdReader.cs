@@ -123,7 +123,7 @@ namespace KaVE.FeedbackProcessor.Preprocessing
 
         private IEnumerable<IDEEvent> GetEventsFromArchive(string zip)
         {
-            using (var ra = new FailsafeIDEEventReadingArchive(zip, ex => _log.DeserializationError(zip, ex)))
+            using (var ra = new FailsafeIDEEventReadingArchive(zip, (f, ex) => _log.DeserializationError(zip, f, ex)))
             {
                 foreach (var e in ra.ReadAllLazy())
                 {

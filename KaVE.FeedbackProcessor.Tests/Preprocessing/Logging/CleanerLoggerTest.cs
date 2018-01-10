@@ -76,7 +76,7 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing.Logging
         {
             // skip intro ...
             _sut.ReadingZip("a");
-            _sut.DeserializationError("abc.zip", new ValidationException("xyz", new Exception()));
+            _sut.DeserializationError("abc.zip", "123.json", new ValidationException("xyz", new Exception()));
             _sut.WritingEvents();
             // skip rest ...
 
@@ -84,7 +84,7 @@ namespace KaVE.FeedbackProcessor.Tests.Preprocessing.Logging
                 "",
                 "#### zip: a",
                 "reading... ",
-                "KaVE.Commons.Utils.Exceptions.ValidationException during deserialization of abc.zip: xyz",
+                "KaVE.Commons.Utils.Exceptions.ValidationException during deserialization of abc.zip (123.json): xyz",
                 "done",
                 "writing... ");
         }

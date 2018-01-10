@@ -26,7 +26,7 @@ namespace KaVE.FeedbackProcessor.Preprocessing.Logging
         void ReadingZip(string zip);
         void WritingEvents();
         void FinishedWriting(IDictionary<string, int> counts);
-        void DeserializationError(string zip, Exception ex);
+        void DeserializationError(string zip, string internalFile, Exception ex);
     }
 
     public class CleanerLogger : ICleanerLogger
@@ -92,9 +92,9 @@ namespace KaVE.FeedbackProcessor.Preprocessing.Logging
             }
         }
 
-        public void DeserializationError(string zip, Exception ex)
+        public void DeserializationError(string zip, string internalFile, Exception ex)
         {
-            _log.Log("{0} during deserialization of {1}: {2}", ex.GetType(), zip, ex.Message);
+            _log.Log("{0} during deserialization of {1} ({2}): {3}", ex.GetType(), zip, internalFile, ex.Message);
             _log.Log();
         }
 

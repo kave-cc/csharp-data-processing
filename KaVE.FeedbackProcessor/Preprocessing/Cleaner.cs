@@ -85,7 +85,7 @@ namespace KaVE.FeedbackProcessor.Preprocessing
             _log.ReadingZip(relZip);
 
             var zip = _io.GetFullPath_Merged(relZip);
-            using (var ra = new FailsafeIDEEventReadingArchive(zip, ex => _log.DeserializationError(zip, ex)))
+            using (var ra = new FailsafeIDEEventReadingArchive(zip, (f, ex) => _log.DeserializationError(zip, f, ex)))
             {
                 foreach (var e in ra.ReadAllLazy())
                 {
