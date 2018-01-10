@@ -121,6 +121,7 @@
     <Compile Include="Preprocessing\Fixers\BaseFixer.cs" />
     <Compile Include="Preprocessing\Fixers\IFixer.cs" />
     <Compile Include="Preprocessing\Fixers\VersionControlEventSplitter.cs" />
+    <Compile Include="Preprocessing\Model\FailsafeIDEEventReadingArchive.cs" />
     <Compile Include="Preprocessing\Logging\IdReaderLogger.cs" />
     <Compile Include="Preprocessing\PreprocessingRunner.cs" />
     <Compile Include="Preprocessing\Logging\CleanerLogger.cs" />

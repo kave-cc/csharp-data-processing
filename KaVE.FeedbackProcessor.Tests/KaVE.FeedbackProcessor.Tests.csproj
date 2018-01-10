@@ -146,6 +146,7 @@
     <Compile Include="Import\FeedbackImporterTestBase.cs" />
     <Compile Include="Import\FeedbackImporterWithoutSessionIdsTest.cs" />
     <Compile Include="Import\FeedbackImporterWithoutTriggerTimesTest.cs" />
+    <Compile Include="Preprocessing\Model\FailsafeIDEEventReadingArchiveTest.cs" />
     <Compile Include="StatisticsUltimate\AssemblyCounterTest.cs" />
     <Compile Include="StatisticsUltimate\ContextStastisticsExtractorTestSuite\GenericEliminationTest.cs" />
     <Compile Include="StatisticsUltimate\ContextStastisticsExtractorTestSuite\MethodInvocationTest.cs" />
