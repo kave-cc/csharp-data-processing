@@ -17,13 +17,18 @@
 using System;
 using System.IO;
 using System.Threading;
+using KaVE.FeedbackProcessor.CompletionEventStatistics;
 using KaVE.FeedbackProcessor.DebuggingHacks;
 using KaVE.FeedbackProcessor.EditLocation;
 using KaVE.FeedbackProcessor.Naming;
 using KaVE.FeedbackProcessor.Preprocessing;
 using KaVE.FeedbackProcessor.Preprocessing.Model;
+using KaVE.FeedbackProcessor.SanityChecks;
+using KaVE.FeedbackProcessor.StatisticsForPapers;
 using KaVE.FeedbackProcessor.StatisticsUltimate;
+using KaVE.FeedbackProcessor.UserStatistics;
 using KaVE.FeedbackProcessor.WatchdogExports;
+using KaVE.RS.SolutionAnalysis;
 
 namespace KaVE.FeedbackProcessor
 {
@@ -39,7 +44,10 @@ namespace KaVE.FeedbackProcessor
         //private const string DirTmp = @"E:\Tmp\";
 
         private const string DirEventsIn = Root + @"Events-raw\";
+
         private const string DirEventsOut = Root + @"Events\";
+        //private const string DirEventsIn = Root + @"Events-some\";
+        //private const string DirEventsOut = Root + @"Events-some-out\";
 
         private const string WdFolder = Root + @"watchdog\";
         private const string SvgFolder = Root + @"svg\";
@@ -61,13 +69,15 @@ namespace KaVE.FeedbackProcessor
             //new TimeBudgetEvaluationApp(Logger).Run();
             //new SSTSequenceExtractor(Logger).Run();
             //RunExhaustiveNamesFixTests();
-            RunPreprocessing();
+            //RunPreprocessing();
             //RunWatchdogExport();
             //RunInteractionStatistics();
+            RunSmokeTest();
             //RunContextStatistics();
             //RunEditLocationAnalysis();
             //RunSSTTransformationComparison(Root + @"Contexts-161031", Root + @"Contexts-170428");
             //RunEmDebug();
+            // RunUserStats(); // used to export positions used in the Demographic generator on Java
 
             var endedAt = DateTime.Now;
             Console.WriteLine(@"ended at {0}, took {1}", endedAt, (endedAt - startedAt));
@@ -123,11 +133,41 @@ namespace KaVE.FeedbackProcessor
             new PreprocessingRunner(DirEventsIn, DirTmp, DirEventsOut, NumWorkers).Run();
         }
 
+        private static void RunSmokeTest()
+        {
+            new ReadAllEventsAndCalcHashCodeRunner(DirEventsOut, NumWorkers).Run();
+        }
+
         private static void RunWatchdogExport()
         {
             CleanDirs(WdFolder, SvgFolder);
             //new WatchdogExportRunner(DirEventsOut, WdFolder, SvgFolder).RunDebugging();
             new WatchdogExportRunner(DirEventsOut, WdFolder, SvgFolder).RunTransformation();
+        }
+
+        private static void RunCompletionEventStatistics()
+        {
+            var io = new CompletionEventStatisticsIo(DirEventsOut);
+            var log = new CompletionEventStatisticsLogger();
+            new CompletionEventStatisticsRunner(io, log).Run();
+        }
+
+        private static void RunUserStats()
+        {
+            new UserStatsRunner(new UserStatsIo(DirEventsOut, "")).Run();
+        }
+
+        private static void RunStatisticsForPaperCreation()
+        {
+            var printer = new StatisticsPrinter();
+            var io = new StatisticsIo(null, null); //DirEventsCompletion_KeepNoTrigger, DirEventsAll);
+            new StatisticsForPaperRunner(io, printer).Run();
+        }
+
+        private static void RunApiStatisticsRunner()
+        {
+            new ApiStatisticsRunner().Run(DirContexts);
+            new LocCounter().Run(DirContexts);
         }
 
         private static void CleanDirs(params string[] dirs)

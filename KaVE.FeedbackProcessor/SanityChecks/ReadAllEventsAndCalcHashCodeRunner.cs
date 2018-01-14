@@ -23,9 +23,9 @@ using KaVE.Commons.Utils.Assertion;
 using KaVE.Commons.Utils.Collections;
 using KaVE.Commons.Utils.IO.Archives;
 
-namespace KaVE.FeedbackProcessor
+namespace KaVE.FeedbackProcessor.SanityChecks
 {
-    public class SmokeTestRunner
+    public class ReadAllEventsAndCalcHashCodeRunner
     {
         private readonly object _lock = new object();
 
@@ -34,7 +34,7 @@ namespace KaVE.FeedbackProcessor
         private IKaVESet<string> _remainingZips;
         private int _numZips;
 
-        public SmokeTestRunner(string baseDir, int numThreads)
+        public ReadAllEventsAndCalcHashCodeRunner(string baseDir, int numThreads)
         {
             Asserts.NotNull(baseDir);
             Asserts.That(Directory.Exists(baseDir));

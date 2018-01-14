@@ -22,9 +22,9 @@ using Ionic.Zip;
 using KaVE.FeedbackProcessor.Import;
 using KaVE.FeedbackProcessor.Properties;
 
-namespace KaVE.FeedbackProcessor
+namespace KaVE.FeedbackProcessor.SanityChecks
 {
-    public class SanityCheckApp
+    public class SanityCheckRunner
     {
         public void Run()
         {

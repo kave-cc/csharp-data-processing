@@ -107,15 +107,21 @@
     <Compile Include="Activities\SolutionEventToActivityMapper.cs" />
     <Compile Include="Activities\UpdateEventToActivityMapper.cs" />
     <Compile Include="Activities\WindowEventToActivityMapper.cs" />
+    <Compile Include="ApiStatisticsRunner.cs" />
     <Compile Include="BaseEventMapper.cs" />
     <Compile Include="BaseEventProcessor.cs" />
     <Compile Include="Cleanup\Heuristics\SimilarDateTimeOffsetComparer.cs" />
+    <Compile Include="CompletionEventStatistics\CompletionEventStatisticsIo.cs" />
+    <Compile Include="CompletionEventStatistics\CompletionEventStatisticsLogger.cs" />
+    <Compile Include="CompletionEventStatistics\CompletionEventStatisticsRunner.cs" />
+    <Compile Include="CSharpVsFSharpRunner.cs" />
     <Compile Include="DebuggingHacks\FailIdentifier.cs" />
     <Compile Include="EditLocation\EditLocationAnalysisLogger.cs" />
     <Compile Include="EditLocation\EditLocationAnalysisRunner.cs" />
     <Compile Include="EditLocation\EditLocationResults.cs" />
     <Compile Include="EditLocation\RelativeEditLocation.cs" />
     <Compile Include="EditLocation\RelativeEditLocationAnalysis.cs" />
+    <Compile Include="LocCounter.cs" />
     <Compile Include="Naming\NameFixesIntegrationTest.cs" />
     <Compile Include="Preprocessing\Filters\ErrorAndInfoEventFilter.cs" />
     <Compile Include="Preprocessing\Fixers\BaseFixer.cs" />
@@ -151,7 +157,11 @@
     <Compile Include="Cleanup\Processors\ToConcurrentEventMapper.cs" />
     <Compile Include="Cleanup\Processors\ErrorFilterProcessor.cs" />
     <Compile Include="DebuggingHacks\SSTTransformationComparison.cs" />
-    <Compile Include="SmokeTestRunner.cs" />
+    <Compile Include="SanityChecks\ReadAllEventsAndCalcHashCodeRunner.cs" />
+    <Compile Include="SanityChecks\CodeCompletionEventSanityCheckRunner.cs" />
+    <Compile Include="StatisticsForPapers\StatisticsForPaperRunner.cs" />
+    <Compile Include="StatisticsForPapers\StatisticsIo.cs" />
+    <Compile Include="StatisticsForPapers\StatisticsPrinter.cs" />
     <Compile Include="StatisticsUltimate\AssemblyCounter.cs" />
     <Compile Include="StatisticsUltimate\ContextStatistics.cs" />
     <Compile Include="StatisticsUltimate\ContextStatisticsExtractor.cs" />
@@ -165,6 +175,9 @@
     <Compile Include="StatisticsUltimate\InteractionStatisticsRunner.cs" />
     <Compile Include="StatisticsUltimate\InteractionStatistics.cs" />
     <Compile Include="StatisticsUltimate\ContextFilter.cs" />
+    <Compile Include="UserStatistics\UserStats.cs" />
+    <Compile Include="UserStatistics\UserStatsIo.cs" />
+    <Compile Include="UserStatistics\UserStatsRunner.cs" />
     <Compile Include="WatchdogExports\EventFixer.cs" />
     <Compile Include="WatchdogExports\Exporter\EventStreamExport.cs" />
     <Compile Include="EventStreamFilter.cs" />
@@ -244,7 +257,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SanityCheckApp.cs" />
+    <Compile Include="SanityChecks\SanityCheckRunner.cs" />
     <Compile Include="Preprocessing\Model\User.cs" />
     <Compile Include="SSTSequenceExtractor.cs" />
     <Compile Include="Statistics\AnonymizationStatisticsLogger.cs" />

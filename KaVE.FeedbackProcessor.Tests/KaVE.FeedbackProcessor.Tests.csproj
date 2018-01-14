@@ -101,6 +101,9 @@
     <Compile Include="Activities\TestFixtures.cs" />
     <Compile Include="Activities\UpdateEventMapperTest.cs" />
     <Compile Include="Activities\WindowEventMapperTest.cs" />
+    <Compile Include="CompletionEventStatistics\CompletionEventStatisticsIoTest.cs" />
+    <Compile Include="CompletionEventStatistics\CompletionEventStatisticsLoggerTest.cs" />
+    <Compile Include="CompletionEventStatistics\CompletionEventStatisticsRunnerTest.cs" />
     <Compile Include="EditLocation\EditLocationAnalysisLoggerTest.cs" />
     <Compile Include="EditLocation\EditLocationAnalysisRunnerTest.cs" />
     <Compile Include="EditLocation\EditLocationResultsTest.cs" />
@@ -147,6 +150,8 @@
     <Compile Include="Import\FeedbackImporterWithoutSessionIdsTest.cs" />
     <Compile Include="Import\FeedbackImporterWithoutTriggerTimesTest.cs" />
     <Compile Include="Preprocessing\Model\FailsafeIDEEventReadingArchiveTest.cs" />
+    <Compile Include="StatisticsForPapers\StatisticsIoTest.cs" />
+    <Compile Include="StatisticsForPapers\StatisticsPrinterTest.cs" />
     <Compile Include="StatisticsUltimate\AssemblyCounterTest.cs" />
     <Compile Include="StatisticsUltimate\ContextStastisticsExtractorTestSuite\GenericEliminationTest.cs" />
     <Compile Include="StatisticsUltimate\ContextStastisticsExtractorTestSuite\MethodInvocationTest.cs" />
@@ -159,6 +164,7 @@
     <Compile Include="StatisticsUltimate\InteractionStatisticsLoggerTest.cs" />
     <Compile Include="StatisticsUltimate\InteractionStatisticsTest.cs" />
     <Compile Include="StatisticsUltimate\ContextFilterTest.cs" />
+    <Compile Include="UserStatistics\UserStatsTest.cs" />
     <Compile Include="WatchdogExports\EventFixerTest.cs" />
     <Compile Include="WatchdogExports\Exporter\EventStreamExportTest.cs" />
     <Compile Include="WatchdogExports\Exporter\SvgExportTest.cs" />
